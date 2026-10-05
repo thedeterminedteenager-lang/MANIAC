@@ -1,0 +1,2040 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MANIAC — Technology Without Limits</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+:root{
+    --bg:#050505;
+    --bg2:#0b0b0d;
+    --card:#111114;
+    --card2:#17171b;
+    --text:#ffffff;
+    --muted:#9a9aa3;
+    --line:rgba(255,255,255,.09);
+    --shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+body.light{
+    --bg:#f5f5f7;
+    --bg2:#ffffff;
+    --card:#ffffff;
+    --card2:#f0f0f2;
+    --text:#080808;
+    --muted:#66666d;
+    --line:rgba(0,0,0,.1);
+    --shadow:0 20px 50px rgba(0,0,0,.1);
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    transition:.35s ease;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+.container{
+    width:min(1250px,92%);
+    margin:auto;
+}
+
+/* CREATOR */
+
+.creator{
+    width:100%;
+    text-align:center;
+    padding:11px 20px;
+    background:linear-gradient(90deg,#000,#151515,#000);
+    color:#aaa;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+body.light .creator{
+    background:#111;
+    color:#fff;
+}
+
+/* NAVIGATION */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    backdrop-filter:blur(18px);
+    background:rgba(5,5,5,.78);
+    border-bottom:1px solid var(--line);
+}
+
+body.light nav{
+    background:rgba(255,255,255,.82);
+}
+
+.nav-inner{
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.logo span{
+    opacity:.45;
+}
+
+.nav-links{
+    display:flex;
+    gap:27px;
+    align-items:center;
+}
+
+.nav-links a{
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.nav-links a:hover{
+    color:var(--text);
+}
+
+.theme-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--card);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.theme-btn svg{
+    width:19px;
+    height:19px;
+    fill:none;
+    stroke:var(--text);
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+/* HERO */
+
+.hero{
+    min-height:720px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 75% 35%,rgba(255,255,255,.10),transparent 25%),
+        radial-gradient(circle at 20% 70%,rgba(100,100,255,.08),transparent 25%);
+}
+
+.hero-content{
+    max-width:800px;
+    padding:100px 0;
+}
+
+.badge{
+    display:inline-flex;
+    padding:8px 14px;
+    border:1px solid var(--line);
+    border-radius:50px;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    color:var(--muted);
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:clamp(58px,9vw,120px);
+    line-height:.9;
+    letter-spacing:-7px;
+    margin-bottom:30px;
+}
+
+.hero h1 span{
+    opacity:.35;
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:19px;
+    line-height:1.7;
+    max-width:680px;
+    margin-bottom:35px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:15px 24px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:800;
+    border:1px solid var(--line);
+    transition:.25s;
+}
+
+.btn-primary{
+    background:var(--text);
+    color:var(--bg);
+}
+
+.btn-secondary{
+    background:transparent;
+    color:var(--text);
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+/* SECTIONS */
+
+section{
+    padding:110px 0;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:30px;
+    margin-bottom:45px;
+}
+
+.section-head h2{
+    font-size:48px;
+    letter-spacing:-2px;
+}
+
+.section-head p{
+    max-width:500px;
+    color:var(--muted);
+    line-height:1.6;
+}
+
+/* FEATURED */
+
+.featured{
+    background:var(--bg2);
+}
+
+.featured-box{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:center;
+    padding:55px;
+    border:1px solid var(--line);
+    border-radius:28px;
+    background:var(--card);
+    box-shadow:var(--shadow);
+}
+
+.featured-image{
+    min-height:480px;
+    border-radius:22px;
+    overflow:hidden;
+    background:#080808;
+}
+
+.featured-image img{
+    width:100%;
+    height:100%;
+    min-height:480px;
+    object-fit:cover;
+}
+
+.featured-info .small{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:2px;
+    margin-bottom:15px;
+}
+
+.featured-info h3{
+    font-size:58px;
+    letter-spacing:-3px;
+    margin-bottom:20px;
+}
+
+.featured-info p{
+    color:var(--muted);
+    line-height:1.7;
+    margin-bottom:30px;
+}
+
+.specs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.spec{
+    padding:18px;
+    background:var(--card2);
+    border-radius:12px;
+    border:1px solid var(--line);
+}
+
+.spec strong{
+    display:block;
+    font-size:18px;
+    margin-bottom:5px;
+}
+
+.spec span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* PRODUCT GRID */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.product-card{
+    border:1px solid var(--line);
+    border-radius:22px;
+    overflow:hidden;
+    background:var(--card);
+    transition:.3s;
+}
+
+.product-card:hover{
+    transform:translateY(-7px);
+    box-shadow:var(--shadow);
+}
+
+.product-image{
+    height:260px;
+    overflow:hidden;
+    background:#090909;
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.4s;
+}
+
+.product-card:hover .product-image img{
+    transform:scale(1.05);
+}
+
+.product-info{
+    padding:25px;
+}
+
+.product-info .category{
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:1.5px;
+    font-weight:900;
+}
+
+.product-info h3{
+    font-size:26px;
+    margin:8px 0 12px;
+}
+
+.product-info p{
+    color:var(--muted);
+    line-height:1.65;
+    font-size:14px;
+}
+
+.features{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+}
+
+.features strong{
+    font-size:11px;
+    letter-spacing:1.5px;
+}
+
+.features ul{
+    list-style:none;
+    margin-top:10px;
+}
+
+.features li{
+    color:var(--muted);
+    font-size:13px;
+    padding:5px 0;
+}
+
+.features li::before{
+    content:"✓";
+    margin-right:8px;
+    color:var(--text);
+}
+
+/* MANIAC VIEW */
+
+.view-section{
+    background:var(--bg2);
+}
+
+.view-showcase{
+    display:grid;
+    grid-template-columns:1.25fr .75fr;
+    gap:50px;
+    align-items:center;
+}
+
+.tv-container{
+    background:#080808;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:25px;
+    padding:35px;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+
+.tv-frame{
+    width:100%;
+    aspect-ratio:16/9;
+    background:#000;
+    border-radius:5px;
+    overflow:hidden;
+    position:relative;
+}
+
+.tv-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.tv-logo{
+    position:absolute;
+    top:18px;
+    left:22px;
+    font-weight:900;
+    font-size:14px;
+    letter-spacing:2px;
+    color:white;
+    text-shadow:0 2px 10px rgba(0,0,0,.7);
+}
+
+.tv-ui{
+    position:absolute;
+    left:25px;
+    bottom:25px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.tv-ui span{
+    background:rgba(0,0,0,.7);
+    border:1px solid rgba(255,255,255,.18);
+    padding:8px 12px;
+    border-radius:7px;
+    color:white;
+    font-size:10px;
+    font-weight:800;
+    backdrop-filter:blur(10px);
+}
+
+.tv-stand{
+    width:35%;
+    height:18px;
+    margin:0 auto;
+    background:#111;
+    border-radius:0 0 15px 15px;
+}
+
+.view-info h2{
+    font-size:64px;
+    letter-spacing:-4px;
+    margin-bottom:20px;
+}
+
+.view-info p{
+    color:var(--muted);
+    line-height:1.7;
+    margin-bottom:30px;
+}
+
+.view-features{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.view-feature{
+    padding:16px;
+    border:1px solid var(--line);
+    background:var(--card);
+    border-radius:12px;
+}
+
+.view-feature strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.view-feature span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* TECHNOLOGY */
+
+.tech-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.tech-card{
+    padding:30px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:var(--card);
+}
+
+.tech-number{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:45px;
+}
+
+.tech-card h3{
+    font-size:21px;
+    margin-bottom:10px;
+}
+
+.tech-card p{
+    color:var(--muted);
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+}
+
+.stat{
+    padding:45px 25px;
+    border-right:1px solid var(--line);
+}
+
+.stat:last-child{
+    border-right:none;
+}
+
+.stat strong{
+    display:block;
+    font-size:42px;
+    letter-spacing:-2px;
+}
+
+.stat span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* NEWS */
+
+.news{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.news-card{
+    padding:28px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:var(--card);
+}
+
+.news-card span{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.5px;
+}
+
+.news-card h3{
+    font-size:22px;
+    margin:15px 0;
+}
+
+.news-card p{
+    color:var(--muted);
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* FOOTER */
+
+footer{
+    border-top:1px solid var(--line);
+    padding:60px 0;
+    background:#030303;
+}
+
+body.light footer{
+    background:#111;
+    color:white;
+}
+
+.footer-inner{
+    display:flex;
+    justify-content:space-between;
+    gap:30px;
+    align-items:center;
+}
+
+.footer-logo{
+    font-size:30px;
+    font-weight:900;
+}
+
+.footer-text{
+    color:#777;
+    font-size:13px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .nav-links{
+        display:none;
+    }
+
+    .featured-box,
+    .view-showcase{
+        grid-template-columns:1fr;
+    }
+
+    .products{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .tech-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .news{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    section{
+        padding:75px 0;
+    }
+
+    .hero{
+        min-height:620px;
+    }
+
+    .hero h1{
+        font-size:60px;
+        letter-spacing:-4px;
+    }
+
+    .featured-box{
+        padding:20px;
+    }
+
+    .featured-info h3{
+        font-size:42px;
+    }
+
+    .products,
+    .tech-grid,
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .stat{
+        border-right:none!important;
+        border-bottom:1px solid var(--line);
+    }
+
+    .stat:last-child{
+        border-bottom:none;
+    }
+
+    .view-info h2{
+        font-size:48px;
+    }
+
+    .tv-container{
+        padding:15px;
+    }
+
+    .footer-inner{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="creator">
+CREATED BY BABATUNFULU
+</div>
+
+<nav>
+<div class="container nav-inner">
+
+<a href="#home" class="logo">
+MANIAC<span>®</span>
+</a>
+
+<div class="nav-links">
+<a href="#products">Products</a>
+<a href="#view">MANIAC VIEW</a>
+<a href="#technology">Technology</a>
+<a href="#news">News</a>
+</div>
+
+<button class="theme-btn" id="themeBtn"></button>
+
+</div>
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+<div class="container">
+
+<div class="hero-content">
+
+<div class="badge">
+THE NEXT GENERATION OF TECHNOLOGY
+</div>
+
+<h1>
+TECHNOLOGY<br>
+<span>WITHOUT LIMITS.</span>
+</h1>
+
+<p>
+MANIAC is building a connected technology ecosystem
+designed around speed, intelligence, creativity and
+the future of human interaction.
+</p>
+
+<div class="hero-buttons">
+
+<a href="#products" class="btn btn-primary">
+EXPLORE PRODUCTS
+</a>
+
+<a href="#view" class="btn btn-secondary">
+DISCOVER MANIAC VIEW
+</a>
+
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- FEATURED PHONE -->
+
+<section class="featured">
+
+<div class="container">
+
+<div class="section-head">
+
+<h2>THE FLAGSHIP.</h2>
+
+<p>
+Designed to be more than a smartphone.
+MANIAC ONE SE is the beginning of an entire ecosystem.
+</p>
+
+</div>
+
+<div class="featured-box">
+
+<div class="featured-image">
+
+<img
+src="https://www.tecno-mobile.com/fileadmin/assets/images/product/pova-7-5g/Pova_7_5G_Magic_Silver.png"
+alt="Smartphone"
+>
+
+</div>
+
+<div class="featured-info">
+
+<div class="small">
+MANIAC ONE SE
+</div>
+
+<h3>
+BUILT<br>
+DIFFERENT.
+</h3>
+
+<p>
+A premium smartphone concept engineered for
+performance, photography, gaming, communication
+and seamless MANIAC ecosystem integration.
+</p>
+
+<div class="specs">
+
+<div class="spec">
+<strong>6.8"</strong>
+<span>Ultra HD Display</span>
+</div>
+
+<div class="spec">
+<strong>120Hz</strong>
+<span>Adaptive Refresh Rate</span>
+</div>
+
+<div class="spec">
+<strong>1TB</strong>
+<span>Maximum Storage</span>
+</div>
+
+<div class="spec">
+<strong>5G</strong>
+<span>Ultra-fast Connectivity</span>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+
+<!-- PRODUCTS -->
+
+<section id="products">
+
+<div class="container">
+
+<div class="section-head">
+
+<h2>THE ECOSYSTEM.</h2>
+
+<p>
+A huge collection of MANIAC products inspired by
+the real-world categories that power modern technology.
+</p>
+
+</div>
+
+<div class="products">
+
+
+<!-- PHONE -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://www.tecno-mobile.com/fileadmin/assets/images/product/pova-7-5g/Pova_7_5G_Magic_Silver.png"
+alt="Smartphone"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">SMARTPHONE</div>
+
+<h3>MANIAC ONE</h3>
+
+<p>
+A flagship smartphone designed around speed,
+intelligence and complete ecosystem integration.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Advanced multi-camera system</li>
+<li>120Hz high-refresh display</li>
+<li>5G connectivity</li>
+<li>All-day intelligent battery</li>
+<li>MANIAC OS</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- LAPTOP -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1200"
+alt="Laptop"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">LAPTOP</div>
+
+<h3>MANIAC BOOK</h3>
+
+<p>
+A high-performance laptop for creators,
+students, engineers, developers and professionals.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>High-performance processor</li>
+<li>High-resolution display</li>
+<li>Fast SSD storage</li>
+<li>Professional creator tools</li>
+<li>MANIAC OS integration</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- TABLET -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Tablet"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">TABLET</div>
+
+<h3>MANIAC TAB</h3>
+
+<p>
+A large-screen portable computer for studying,
+drawing, entertainment, reading and productivity.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Large high-resolution display</li>
+<li>Stylus support</li>
+<li>Long battery life</li>
+<li>Multi-window productivity</li>
+<li>MANIAC OS integration</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- SMARTWATCH -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Smartwatch"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">WEARABLE</div>
+
+<h3>MANIAC WATCH</h3>
+
+<p>
+A smartwatch designed to keep important information,
+notifications and intelligent tools on your wrist.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Always-on smart display</li>
+<li>Fitness tracking</li>
+<li>Notifications</li>
+<li>Voice assistant</li>
+<li>Phone integration</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- EARBUDS -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/8534088/pexels-photo-8534088.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Wireless earbuds"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">AUDIO</div>
+
+<h3>MANIAC BUDS</h3>
+
+<p>
+Compact wireless earbuds designed for music,
+calls, gaming and everyday listening.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Active noise cancellation</li>
+<li>Wireless charging case</li>
+<li>Low-latency audio</li>
+<li>Touch controls</li>
+<li>AI voice assistant</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- GAME CONSOLE -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/7915357/pexels-photo-7915357.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Gaming console"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">GAMING CONSOLE</div>
+
+<h3>MANIAC GAME BOX</h3>
+
+<p>
+A home gaming system built for high-resolution
+games, online multiplayer and entertainment.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>4K gaming</li>
+<li>High-speed SSD</li>
+<li>Wireless controllers</li>
+<li>Online multiplayer</li>
+<li>Game Mode</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- CAMERA -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/9095/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1200"
+alt="Digital camera"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">CAMERA</div>
+
+<h3>MANIAC CAM</h3>
+
+<p>
+A dedicated camera for creators who want greater
+control over photography, filmmaking and vlogging.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Large image sensor</li>
+<li>Interchangeable lenses</li>
+<li>4K video</li>
+<li>Fast autofocus</li>
+<li>Creator controls</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- VR -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/7562026/pexels-photo-7562026.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Virtual reality headset"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">VIRTUAL REALITY</div>
+
+<h3>MANIAC VR</h3>
+
+<p>
+An immersive headset concept for virtual worlds,
+gaming, interactive experiences and exploration.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Immersive VR display</li>
+<li>Wireless operation</li>
+<li>Motion tracking</li>
+<li>Hand controllers</li>
+<li>MANIAC ecosystem</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- MONITOR -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/777001/pexels-photo-777001.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Computer monitor"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">COMPUTER DISPLAY</div>
+
+<h3>MANIAC DISPLAY</h3>
+
+<p>
+A high-performance monitor designed for gaming,
+editing, programming, design and productivity.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>High-resolution panel</li>
+<li>High refresh rate</li>
+<li>Low response time</li>
+<li>Creator color modes</li>
+<li>Multiple connections</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- SMART SPEAKER -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/1279107/pexels-photo-1279107.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Smart speaker"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">SMART HOME AUDIO</div>
+
+<h3>MANIAC SPEAKER</h3>
+
+<p>
+A connected smart speaker designed for music,
+voice commands, information and home control.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>360-degree audio</li>
+<li>Voice assistant</li>
+<li>Smart-home control</li>
+<li>Multi-room audio</li>
+<li>Wireless connectivity</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- KEYBOARD -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/2115257/pexels-photo-2115257.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Mechanical keyboard"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">PC ACCESSORIES</div>
+
+<h3>MANIAC KEYBOARD</h3>
+
+<p>
+A premium keyboard designed for gaming,
+programming, writing and professional workflows.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Mechanical switches</li>
+<li>Customizable keys</li>
+<li>RGB lighting</li>
+<li>Wireless connectivity</li>
+<li>Low-latency mode</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- PRINTER -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://djokstore.ci/cdn/shop/products/1_1_a343b771-d02e-4d97-8e9d-049ebac974ca.jpg?v=1661872629"
+alt="Laser printer"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">HOME & OFFICE</div>
+
+<h3>MANIAC PRINT</h3>
+
+<p>
+A connected printer concept designed for homes,
+schools, offices and creative projects.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Wireless printing</li>
+<li>Mobile printing</li>
+<li>High-resolution output</li>
+<li>Automatic document handling</li>
+<li>Cloud-ready workflows</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- DRONE -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/724921/pexels-photo-724921.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Camera drone"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">AERIAL TECHNOLOGY</div>
+
+<h3>MANIAC AIR</h3>
+
+<p>
+A compact camera drone concept designed for
+aerial photography, exploration and creative filming.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>Stabilized camera</li>
+<li>GPS positioning</li>
+<li>Intelligent flight modes</li>
+<li>Obstacle awareness</li>
+<li>High-resolution video</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- ROUTER -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://media.takealot.com/covers_images/57c1791de3ac4237adf5dd586f1971fb/s-zoom.file"
+alt="Wi-Fi router"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">CONNECTIVITY</div>
+
+<h3>MANIAC CONNECT</h3>
+
+<p>
+A high-speed home networking concept designed
+to connect every MANIAC device reliably.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>High-speed Wi-Fi</li>
+<li>Multi-device networking</li>
+<li>Smart network management</li>
+<li>Guest network support</li>
+<li>MANIAC ecosystem optimization</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- POWER BANK -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://www.celebritycruises.com/blog/content/uploads/2024/09/what-to-pack-for-japan-portable-chargers.jpg"
+alt="Power bank"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">POWER ACCESSORY</div>
+
+<h3>MANIAC POWER</h3>
+
+<p>
+A portable power solution designed to keep phones,
+tablets, earbuds and other devices charged.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>High-capacity battery</li>
+<li>Fast charging</li>
+<li>Multiple outputs</li>
+<li>Battery status display</li>
+<li>Portable design</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- SMART TV -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://cdn.bestadvisor.com/reviews/e4/ba/e4bae87312546fd11613c3c01f42faea.jpg"
+alt="Smart television"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">SMART TV</div>
+
+<h3>MANIAC VIEW</h3>
+
+<p>
+A premium smart television concept designed for
+movies, gaming, streaming and the connected home.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>4K Ultra HD display</li>
+<li>120Hz refresh rate</li>
+<li>MANIAC OS</li>
+<li>AI picture enhancement</li>
+<li>Voice control</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+
+<!-- AI -->
+
+<div class="product-card">
+
+<div class="product-image">
+<img
+src="https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1200"
+alt="Artificial intelligence technology"
+>
+</div>
+
+<div class="product-info">
+
+<div class="category">ARTIFICIAL INTELLIGENCE</div>
+
+<h3>MANIAC AI</h3>
+
+<p>
+Intelligence that connects your devices,
+understands your workflow and helps you get more done.
+</p>
+
+<div class="features">
+
+<strong>KEY FEATURES</strong>
+
+<ul>
+<li>AI assistant</li>
+<li>Cross-device intelligence</li>
+<li>Voice interaction</li>
+<li>Smart automation</li>
+<li>Personalized recommendations</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- MANIAC VIEW -->
+
+<section class="view-section" id="view">
+
+<div class="container">
+
+<div class="section-head">
+
+<h2>MEET MANIAC VIEW.</h2>
+
+<p>
+Your entertainment. Your games. Your world.
+On one intelligent display.
+</p>
+
+</div>
+
+<div class="view-showcase">
+
+<div class="tv-container">
+
+<div class="tv-frame">
+
+<img
+src="https://images.pexels.com/photos/6976103/pexels-photo-6976103.jpeg?auto=compress&cs=tinysrgb&w=1600"
+alt="Real smart television"
+>
+
+<div class="tv-logo">
+MANIAC VIEW
+</div>
+
+<div class="tv-ui">
+
+<span>4K ULTRA HD</span>
+<span>120Hz</span>
+<span>MANIAC OS</span>
+<span>AI PICTURE</span>
+<span>GAME MODE</span>
+
+</div>
+
+</div>
+
+<div class="tv-stand"></div>
+
+</div>
+
+<div class="view-info">
+
+<h2>
+YOUR<br>
+WINDOW<br>
+TO EVERYTHING.
+</h2>
+
+<p>
+MANIAC VIEW is imagined as the centre of the
+MANIAC home ecosystem. Connect your phone,
+laptop, gaming system and AI assistant to one
+intelligent entertainment hub.
+</p>
+
+<div class="view-features">
+
+<div class="view-feature">
+<strong>4K ULTRA HD</strong>
+<span>Sharp and detailed visuals.</span>
+</div>
+
+<div class="view-feature">
+<strong>120Hz</strong>
+<span>Smooth motion for games and movies.</span>
+</div>
+
+<div class="view-feature">
+<strong>MANIAC OS</strong>
+<span>A smart interface built for MANIAC.</span>
+</div>
+
+<div class="view-feature">
+<strong>AI PICTURE</strong>
+<span>Intelligent image enhancement.</span>
+</div>
+
+<div class="view-feature">
+<strong>VOICE CONTROL</strong>
+<span>Control your TV naturally.</span>
+</div>
+
+<div class="view-feature">
+<strong>GAME MODE</strong>
+<span>Fast response for gaming.</span>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+
+<!-- TECHNOLOGY -->
+
+<section id="technology">
+
+<div class="container">
+
+<div class="section-head">
+
+<h2>ENGINEERED FOR THE FUTURE.</h2>
+
+<p>
+MANIAC technology is designed to work together,
+not exist as isolated products.
+</p>
+
+</div>
+
+<div class="tech-grid">
+
+<div class="tech-card">
+<div class="tech-number">01</div>
+<h3>MANIAC OS</h3>
+<p>
+One intelligent operating system connecting
+the entire MANIAC ecosystem.
+</p>
+</div>
+
+<div class="tech-card">
+<div class="tech-number">02</div>
+<h3>MANIAC AI</h3>
+<p>
+Artificial intelligence that follows you
+across compatible MANIAC devices.
+</p>
+</div>
+
+<div class="tech-card">
+<div class="tech-number">03</div>
+<h3>ULTRA CONNECT</h3>
+<p>
+High-speed connectivity designed for
+seamless communication between devices.
+</p>
+</div>
+
+<div class="tech-card">
+<div class="tech-number">04</div>
+<h3>ONE ECOSYSTEM</h3>
+<p>
+Your phone, laptop, TV, gaming system,
+wearables and AI assistant working as one.
+</p>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- STATS -->
+
+<section>
+
+<div class="container">
+
+<div class="stats">
+
+<div class="stat">
+<strong>20+</strong>
+<span>Technology Products</span>
+</div>
+
+<div class="stat">
+<strong>120Hz</strong>
+<span>High Refresh Technology</span>
+</div>
+
+<div class="stat">
+<strong>4K</strong>
+<span>Ultra HD Entertainment</span>
+</div>
+
+<div class="stat">
+<strong>∞</strong>
+<span>Possibilities</span>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- NEWS -->
+
+<section id="news">
+
+<div class="container">
+
+<div class="section-head">
+
+<h2>MANIAC NEWS.</h2>
+
+<p>
+Ideas, technology and the future of MANIAC.
+</p>
+
+</div>
+
+<div class="news">
+
+<div class="news-card">
+
+<span>VISION</span>
+
+<h3>
+Building an ecosystem instead of isolated gadgets.
+</h3>
+
+<p>
+MANIAC is designed around the idea that every
+device should communicate naturally with the others.
+</p>
+
+</div>
+
+<div class="news-card">
+
+<span>INNOVATION</span>
+
+<h3>
+The future of intelligent entertainment.
+</h3>
+
+<p>
+MANIAC VIEW combines television, gaming,
+AI and smart-home experiences into one platform.
+</p>
+
+</div>
+
+<div class="news-card">
+
+<span>FUTURE</span>
+
+<h3>
+Technology should feel invisible.
+</h3>
+
+<p>
+The best technology works in the background,
+giving people more time to create, explore and live.
+</p>
+
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="container footer-inner">
+
+<div class="footer-logo">
+MANIAC®
+</div>
+
+<div class="footer-text">
+CREATED BY BABATUNFULU · TECHNOLOGY WITHOUT LIMITS.
+</div>
+
+</div>
+
+</footer>
+
+
+<script>
+
+const themeBtn = document.getElementById("themeBtn");
+
+const sunIcon = `
+<svg viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="4"></circle>
+<path d="M12 2v2"></path>
+<path d="M12 20v2"></path>
+<path d="M4.93 4.93l1.41 1.41"></path>
+<path d="M17.66 17.66l1.41 1.41"></path>
+<path d="M2 12h2"></path>
+<path d="M20 12h2"></path>
+<path d="M4.93 19.07l1.41-1.41"></path>
+<path d="M17.66 6.34l1.41-1.41"></path>
+</svg>
+`;
+
+const moonIcon = `
+<svg viewBox="0 0 24 24">
+<path d="M21 12.8A8.5 8.5 0 1 1 11.2 3
+A6.7 6.7 0 0 0 21 12.8Z"></path>
+</svg>
+`;
+
+function updateThemeIcon(){
+
+    if(document.body.classList.contains("light")){
+        themeBtn.innerHTML = moonIcon;
+    }else{
+        themeBtn.innerHTML = sunIcon;
+    }
+
+}
+
+themeBtn.addEventListener("click",()=>{
+
+    document.body.classList.toggle("light");
+
+    const mode =
+        document.body.classList.contains("light")
+        ? "light"
+        : "dark";
+
+    localStorage.setItem("maniac-theme",mode);
+
+    updateThemeIcon();
+
+});
+
+const savedTheme =
+    localStorage.getItem("maniac-theme");
+
+if(savedTheme === "light"){
+    document.body.classList.add("light");
+}
+
+updateThemeIcon();
+
+</script>
+
+<section id="maniac-icons" style="padding:100px 8%;">
+
+  <div style="text-align:center;margin-bottom:50px;">
+    <span style="font-size:12px;font-weight:800;letter-spacing:3px;color:var(--accent);">MANIAC ICONS</span>
+    <h2 style="font-size:clamp(32px,5vw,58px);margin:12px 0;">PEOPLE SHAPING THE WORLD.</h2>
+    <p style="color:var(--muted);max-width:650px;margin:auto;line-height:1.7;">
+      Icons from technology, football, entertainment, music and beyond.
+    </p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px;">
+
+    <div class="maniac-icon-card">
+      <div class="maniac-icon-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Elon_Musk_Royal_Society_%28crop1%29.jpg" alt="Elon Musk">
+      </div>
+      <div class="maniac-icon-info">
+        <small>TECH & INNOVATION</small>
+        <h3>ELON MUSK</h3>
+        <p>Technology entrepreneur and one of the most recognizable figures in modern innovation.</p>
+      </div>
+    </div>
+
+    <div class="maniac-icon-card">
+      <div class="maniac-icon-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Lamine_Yamal_2025.jpg/640px-Lamine_Yamal_2025.jpg" alt="Lamine Yamal">
+      </div>
+      <div class="maniac-icon-info">
+        <small>FOOTBALL</small>
+        <h3>LAMINE YAMAL</h3>
+        <p>Barcelona forward and one of the most exciting young talents in world football.</p>
+      </div>
+    </div>
+
+    <div class="maniac-icon-card">
+      <div class="maniac-icon-placeholder">🎬</div>
+      <div class="maniac-icon-info">
+        <small>ENTERTAINMENT</small>
+        <h3>COMING SOON</h3>
+        <p>Celebrating major names from film, television and entertainment.</p>
+      </div>
+    </div>
+
+    <div class="maniac-icon-card">
+      <div class="maniac-icon-placeholder">🎵</div>
+      <div class="maniac-icon-info">
+        <small>MUSIC</small>
+        <h3>COMING SOON</h3>
+        <p>Artists whose creativity continues to influence millions.</p>
+      </div>
+    </div>
+
+    <div class="maniac-icon-card">
+      <div class="maniac-icon-placeholder">🏆</div>
+      <div class="maniac-icon-info">
+        <small>SPORTS</small>
+        <h3>COMING SOON</h3>
+        <p>Champions who continue to push the limits.</p>
+      </div>
+    </div>
+
+    <div class="maniac-icon-card">
+      <div class="maniac-icon-placeholder">💡</div>
+      <div class="maniac-icon-info">
+        <small>INSPIRATION</small>
+        <h3>COMING SOON</h3>
+        <p>Creators, innovators and visionaries changing the world.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.maniac-icon-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  overflow:hidden;
+  transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease;
+}
+.maniac-icon-card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 25px 60px rgba(0,0,0,.3);
+  border-color:var(--accent);
+}
+.maniac-icon-image{
+  height:330px;
+  overflow:hidden;
+  background:#111;
+}
+.maniac-icon-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .5s ease;
+}
+.maniac-icon-card:hover .maniac-icon-image img{
+  transform:scale(1.08);
+}
+.maniac-icon-placeholder{
+  height:330px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:70px;
+  background:#111;
+}
+.maniac-icon-info{
+  padding:25px;
+}
+.maniac-icon-info small{
+  color:var(--accent);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+}
+.maniac-icon-info h3{
+  margin:10px 0;
+  font-size:24px;
+}
+.maniac-icon-info p{
+  color:var(--muted);
+  line-height:1.7;
+}
+</style></body>
+</html>
+
+
+
+
+
+
+
