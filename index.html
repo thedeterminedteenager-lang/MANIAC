@@ -729,7 +729,47 @@ body.light footer{
 }
 
 </style>
-  <link rel="icon" type="image/png" href="favicon.png">`r`n</head>
+  <link rel="icon" type="image/png" href="favicon.png">`r`n<style id="maniac-welcome-style">
+#maniac-welcome{
+position:fixed;
+inset:0;
+z-index:999999;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#05070a;
+color:#00f6ff;
+font-family:Arial,sans-serif;
+font-size:clamp(32px,7vw,90px);
+font-weight:900;
+letter-spacing:clamp(4px,1vw,14px);
+text-align:center;
+text-shadow:0 0 10px #00f6ff,0 0 30px #00f6ff,0 0 70px rgba(0,246,255,.7);
+animation:maniacWelcomeIn .9s ease-out,maniacWelcomeOut 1s ease-in 2.3s forwards;
+}
+#maniac-welcome::after{
+content:"";
+position:absolute;
+inset:0;
+background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,246,255,.035) 4px);
+pointer-events:none;
+}
+@keyframes maniacWelcomeIn{
+from{opacity:0;transform:scale(1.08);letter-spacing:18px}
+to{opacity:1;transform:scale(1);letter-spacing:clamp(4px,1vw,14px)}
+}
+@keyframes maniacWelcomeOut{
+from{opacity:1;transform:scale(1)}
+to{opacity:0;transform:scale(1.04);visibility:hidden;pointer-events:none}
+}
+</style>
+<div id="maniac-welcome">WELCOME TO MANIAC</div>
+<script>
+setTimeout(function(){
+const w=document.getElementById("maniac-welcome");
+if(w)w.remove();
+},3400);
+</script></head>
 
 <body>
 
@@ -2593,7 +2633,7 @@ function loop(now){
  animation=requestAnimationFrame(loop);
 }
 
-function keyDown(e){
+function keyDown(e){if(e.target&&((e.target.tagName==="INPUT")||(e.target.tagName==="TEXTAREA")||(e.target.tagName==="SELECT")||e.target.isContentEditable))return;
 
  const k=e.key.toLowerCase();
 
@@ -3154,45 +3194,7 @@ body.future-mode h2{
 
   animate();
 })();
-</script><script>
-(function(){
-  const box=document.getElementById("maniac-ai-messages");
-  const panel=document.getElementById("maniac-ai-panel");
-  if(!box||!panel)return;
-
-  const KEY="maniacAIChatHistory";
-
-  function saveHistory(){
-    localStorage.setItem(KEY,box.innerHTML);
-  }
-
-  function restoreHistory(){
-    const saved=localStorage.getItem(KEY);
-    if(saved) box.innerHTML=saved;
-  }
-
-  const observer=new MutationObserver(function(){
-    saveHistory();
-  });
-
-  observer.observe(box,{childList:true,subtree:true});
-
-  restoreHistory();
-
-  const header=panel.querySelector("div");
-  if(header){
-    const clear=document.createElement("button");
-    clear.type="button";
-    clear.textContent="CLEAR CHAT";
-    clear.style.cssText="margin-left:auto;margin-right:42px;background:transparent;border:1px solid rgba(255,255,255,.2);color:inherit;border-radius:8px;padding:5px 8px;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;";
-    clear.addEventListener("click",function(){
-      localStorage.removeItem(KEY);
-      box.innerHTML="";
-    });
-    header.appendChild(clear);
-  }
-})();
-</script><style>
+</script></script><style>
 #maniac-ai-panel{
   border:1px solid rgba(0,255,255,.45) !important;
   background:
@@ -4404,6 +4406,9 @@ body.light-mode .mr-helpful{border-color:rgba(0,0,0,.15)}
 })();
 </script></body>
 </html>
+
+
+
 
 
 
