@@ -1,0 +1,1924 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MANIAC // CREATOR — MUHAMMAD</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+:root{
+--bg:#05070a;
+--panel:rgba(15,22,30,.78);
+--line:rgba(0,246,255,.22);
+--cyan:#00f6ff;
+--text:#f4fbff;
+--muted:#91a4ad;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+margin:0;
+background:
+radial-gradient(circle at 50% -10%,rgba(0,246,255,.16),transparent 38%),
+linear-gradient(180deg,#030507,#071017 55%,#030507);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+min-height:100vh;
+overflow-x:hidden;
+}
+body:before{
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,246,255,.025) 4px);
+z-index:10;
+}
+.grid{
+position:fixed;
+inset:0;
+background-image:
+linear-gradient(rgba(0,246,255,.035) 1px,transparent 1px),
+linear-gradient(90deg,rgba(0,246,255,.035) 1px,transparent 1px);
+background-size:45px 45px;
+mask-image:linear-gradient(to bottom,black,transparent 85%);
+pointer-events:none;
+}
+.top{
+position:sticky;
+top:0;
+z-index:20;
+backdrop-filter:blur(18px);
+background:rgba(3,6,9,.78);
+border-bottom:1px solid var(--line);
+}
+.nav{
+max-width:1200px;
+margin:auto;
+padding:17px 22px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+}
+.logo{
+font-size:22px;
+font-weight:900;
+letter-spacing:4px;
+color:var(--cyan);
+text-shadow:0 0 18px rgba(0,246,255,.55);
+}
+.back{
+color:var(--text);
+text-decoration:none;
+border:1px solid var(--line);
+padding:10px 16px;
+border-radius:999px;
+font-size:12px;
+font-weight:800;
+letter-spacing:1px;
+transition:.25s;
+}
+.back:hover{
+color:var(--cyan);
+border-color:var(--cyan);
+box-shadow:0 0 20px rgba(0,246,255,.2);
+}
+.hero{
+max-width:1200px;
+margin:auto;
+padding:90px 22px 60px;
+text-align:center;
+position:relative;
+}
+.kicker{
+color:var(--cyan);
+font-size:12px;
+font-weight:900;
+letter-spacing:5px;
+margin-bottom:20px;
+}
+h1{
+font-size:clamp(48px,10vw,105px);
+line-height:.9;
+margin:0;
+font-weight:1000;
+letter-spacing:-4px;
+text-shadow:0 0 18px rgba(0,246,255,.35),0 0 55px rgba(0,246,255,.12);
+}
+.hero p{
+max-width:720px;
+margin:28px auto 0;
+color:var(--muted);
+font-size:18px;
+line-height:1.7;
+}
+.creator-name{
+color:var(--cyan);
+}
+.section{
+max-width:1200px;
+margin:auto;
+padding:35px 22px 70px;
+}
+.section-title{
+font-size:13px;
+letter-spacing:4px;
+color:var(--cyan);
+font-weight:900;
+margin-bottom:22px;
+}
+.profile{
+display:grid;
+grid-template-columns:1.1fr .9fr;
+gap:22px;
+}
+.card{
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:24px;
+padding:28px;
+box-shadow:0 15px 50px rgba(0,0,0,.22);
+backdrop-filter:blur(14px);
+transition:.3s;
+}
+.card:hover{
+transform:translateY(-5px);
+border-color:rgba(0,246,255,.5);
+box-shadow:0 20px 60px rgba(0,246,255,.08);
+}
+.card h2{
+margin:0 0 12px;
+font-size:25px;
+}
+.card p{
+color:var(--muted);
+line-height:1.7;
+margin:0;
+}
+.badge{
+display:inline-block;
+margin:0 7px 7px 0;
+padding:8px 12px;
+border:1px solid var(--line);
+border-radius:999px;
+color:var(--cyan);
+font-size:11px;
+font-weight:800;
+letter-spacing:1px;
+}
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px;
+}
+.stat{
+text-align:center;
+padding:25px 15px;
+}
+.number{
+font-size:36px;
+font-weight:1000;
+color:var(--cyan);
+text-shadow:0 0 20px rgba(0,246,255,.25);
+}
+.label{
+margin-top:7px;
+font-size:11px;
+color:var(--muted);
+letter-spacing:2px;
+font-weight:800;
+}
+.features{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+.feature{
+min-height:190px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+}
+.icon{
+font-size:30px;
+margin-bottom:20px;
+}
+.feature h3{
+margin:0 0 10px;
+font-size:19px;
+}
+.feature p{
+font-size:14px;
+}
+.project{
+border-left:3px solid var(--cyan);
+}
+.project h3{
+margin-top:0;
+}
+.project span{
+font-size:10px;
+letter-spacing:2px;
+color:var(--cyan);
+font-weight:900;
+}
+.links{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+}
+.link{
+text-decoration:none;
+color:var(--text);
+border:1px solid var(--line);
+padding:13px 18px;
+border-radius:12px;
+font-size:12px;
+font-weight:800;
+transition:.25s;
+}
+.link:hover{
+color:var(--cyan);
+border-color:var(--cyan);
+transform:translateY(-2px);
+}
+.quote{
+text-align:center;
+padding:65px 25px;
+}
+.quote strong{
+display:block;
+font-size:clamp(24px,4vw,42px);
+line-height:1.25;
+}
+.quote span{
+display:block;
+margin-top:18px;
+color:var(--cyan);
+letter-spacing:3px;
+font-size:11px;
+font-weight:900;
+}
+footer{
+border-top:1px solid var(--line);
+text-align:center;
+padding:30px 20px;
+color:var(--muted);
+font-size:11px;
+letter-spacing:2px;
+}
+@media(max-width:800px){
+.profile{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,1fr)}
+.features{grid-template-columns:1fr}
+.hero{padding-top:65px}
+}
+</style>
+</head>
+<body>
+<div class="grid"></div>
+
+<header class="top">
+<div class="nav">
+<div class="logo">MANIAC // CREATOR</div>
+<a class="back" href="index.html">← BACK TO MANIAC</a>
+</div>
+</header>
+
+<main>
+<section class="hero">
+<div class="kicker">CREATOR PROFILE // SYSTEM ONLINE</div>
+<h1>MUHAMMAD</h1>
+<p>
+Welcome to the creator side of <span class="creator-name">MANIAC</span> —
+the personal workspace, projects, ideas and technology vision of its creator.
+</p>
+</section>
+
+<section class="section">
+<div class="section-title">01 // CREATOR PROFILE</div>
+<div class="profile">
+<div class="card">
+<h2>MUHAMMAD</h2>
+<p>
+Technology enthusiast, creator and aspiring entrepreneur. Interested in smartphones,
+computers, artificial intelligence, gaming, cybersecurity, web development,
+digital creativity and the future of technology.
+</p>
+<br>
+<span class="badge">TECHNOLOGY</span>
+<span class="badge">CREATOR</span>
+<span class="badge">INNOVATION</span>
+<span class="badge">VIDEO EDITING</span>
+<span class="badge">WEB DEVELOPMENT</span>
+</div>
+
+<div class="card">
+<h2>CREATOR MISSION</h2>
+<p>
+Learn technology. Experiment with it. Build with it. Share ideas.
+The goal is to turn imagination into real projects and eventually build technology
+that can reach people around the world.
+</p>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-title">02 // CREATOR STATS</div>
+<div class="stats">
+<div class="card stat"><div class="number">01</div><div class="label">MAIN BRAND</div></div>
+<div class="card stat"><div class="number">∞</div><div class="label">IDEAS</div></div>
+<div class="card stat"><div class="number">24/7</div><div class="label">CURIOSITY</div></div>
+<div class="card stat"><div class="number">1</div><div class="label">VISION</div></div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-title">03 // CREATOR FEATURES</div>
+<div class="features">
+
+<div class="card feature">
+<div>
+<div class="icon">🎬</div>
+<h3>MEDIA STUDIO</h3>
+<p>Video editing, short-form content, technology videos and future media projects.</p>
+</div>
+</div>
+
+<div class="card feature">
+<div>
+<div class="icon">💡</div>
+<h3>IDEA LAB</h3>
+<p>A space for technology concepts, product ideas, experiments and ambitious inventions.</p>
+</div>
+</div>
+
+<div class="card feature">
+<div>
+<div class="icon">🛠️</div>
+<h3>CREATOR TOOLS</h3>
+<p>A future control center for the tools and systems used to create MANIAC content.</p>
+</div>
+</div>
+
+<div class="card feature">
+<div>
+<div class="icon">🚀</div>
+<h3>PROJECTS</h3>
+<p>Track the technology projects currently being designed, tested or imagined.</p>
+</div>
+</div>
+
+<div class="card feature">
+<div>
+<div class="icon">🌐</div>
+<h3>ONLINE PRESENCE</h3>
+<p>Connect the creator's websites, social platforms, code repositories and media channels.</p>
+</div>
+</div>
+
+<div class="card feature">
+<div>
+<div class="icon">🤖</div>
+<h3>AI LAB</h3>
+<p>Experiment with artificial intelligence and explore new ways humans can interact with technology.</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="section">
+<div class="section-title">04 // CURRENT PROJECTS</div>
+
+<div class="card project">
+<span>PROJECT 01</span>
+<h3>MANIAC</h3>
+<p>
+A technology brand concept exploring smartphones, computers, gaming, AI,
+networking, displays and an entire connected ecosystem.
+</p>
+</div>
+
+<br>
+
+<div class="card project">
+<span>PROJECT 02</span>
+<h3>MANIAC WEBSITE</h3>
+<p>
+The evolving digital home of the MANIAC vision, featuring interactive experiences,
+MANIAC AI, media, product concepts and creator features.
+</p>
+</div>
+
+<br>
+
+<div class="card project">
+<span>PROJECT 03</span>
+<h3>CONTENT CREATION</h3>
+<p>
+Technology-focused videos, short-form content and creative experiments designed
+to share ideas with a growing audience.
+</p>
+</div>
+</section>
+
+<section class="section">
+<div class="section-title">05 // CREATOR LINKS</div>
+<div class="card">
+<div class="links">
+<a class="link" href="index.html">MANIAC WEBSITE</a>
+<a class="link" href="index.html#maniac-ai">MANIAC AI</a>
+<a class="link" href="index.html#maniac-media">MANIAC MEDIA</a>
+<a class="link" href="index.html#maniac-game">MANIAC GAME</a>
+</div>
+</div>
+</section>
+
+<section class="section quote">
+<div class="card">
+<strong>MANIAC is more than a website.<br>It's the beginning of a vision.</strong>
+<span>MUHAMMAD // FOUNDER • CREATOR • TECHNOLOGY ENTHUSIAST</span>
+</div>
+</section>
+</main>
+
+<footer>
+MANIAC // CREATOR PORTAL<br><br>
+CREATED BY MUHAMMAD
+</footer>
+<style id="maniac-creator-tools-style">
+#maniac-creator-tools{margin:70px auto 40px;max-width:1150px;padding:0 20px;font-family:Arial,sans-serif}
+.mct-header{text-align:center;margin-bottom:35px}
+.mct-header .eyebrow{color:#00f6ff;font-size:12px;font-weight:900;letter-spacing:4px}
+.mct-header h2{margin:10px 0;color:#fff;font-size:clamp(30px,5vw,52px);text-shadow:0 0 15px rgba(0,246,255,.45)}
+.mct-header p{color:#8e9aa8}
+.mct-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.mct-card{background:rgba(5,10,16,.88);border:1px solid rgba(0,246,255,.22);border-radius:18px;padding:22px;box-shadow:0 0 25px rgba(0,246,255,.06);transition:.25s}
+.mct-card:hover{border-color:#00f6ff;box-shadow:0 0 30px rgba(0,246,255,.15);transform:translateY(-3px)}
+.mct-card h3{color:#00f6ff;margin:0 0 8px}
+.mct-card p{color:#91a0ad;font-size:14px}
+.mct-input,.mct-select,.mct-notes{width:100%;box-sizing:border-box;background:#080d13;color:#fff;border:1px solid #26333f;border-radius:10px;padding:12px;margin:8px 0;font:inherit;outline:none}
+.mct-input:focus,.mct-select:focus,.mct-notes:focus{border-color:#00f6ff;box-shadow:0 0 10px rgba(0,246,255,.12)}
+.mct-btn{border:1px solid #00f6ff;background:rgba(0,246,255,.08);color:#00f6ff;border-radius:10px;padding:11px 16px;font-weight:900;cursor:pointer;transition:.2s}
+.mct-btn:hover{background:#00f6ff;color:#05070a;box-shadow:0 0 18px rgba(0,246,255,.5)}
+.mct-output{margin-top:12px;min-height:22px;padding:12px;border-radius:10px;background:rgba(0,246,255,.035);border:1px solid rgba(0,246,255,.12);color:#dcecff;white-space:pre-wrap;line-height:1.55}
+.mct-full{grid-column:1/-1}
+.mct-check{display:flex;gap:10px;align-items:center;color:#dcecff;margin:10px 0}
+.mct-check input{accent-color:#00f6ff}
+.mct-notes{min-height:150px;resize:vertical}
+.mct-saved{font-size:12px;color:#00f6ff;margin-left:8px}
+@media(max-width:750px){.mct-grid{grid-template-columns:1fr}.mct-full{grid-column:auto}}
+</style>
+
+<section id="maniac-creator-tools">
+  <div class="mct-header">
+    <div class="eyebrow">MANIAC // CREATOR SYSTEM</div>
+    <h2>CREATOR TOOLBOX</h2>
+    <p>Build ideas. Create content. Move faster.</p>
+  </div>
+
+  <div class="mct-grid">
+
+    <div class="mct-card">
+      <h3>💡 Idea Generator</h3>
+      <p>Generate content ideas for your next post.</p>
+      <select id="mct-idea-type" class="mct-select">
+        <option>Tech</option><option>Gaming</option><option>Football</option>
+        <option>Entertainment</option><option>School</option><option>General</option>
+      </select>
+      <button class="mct-btn" onclick="mctIdea()">GENERATE IDEA</button>
+      <div id="mct-idea-output" class="mct-output">Your idea will appear here.</div>
+    </div>
+
+    <div class="mct-card">
+      <h3>🎯 Title Generator</h3>
+      <p>Turn a topic into clickable title ideas.</p>
+      <input id="mct-title-topic" class="mct-input" placeholder="Enter your topic">
+      <button class="mct-btn" onclick="mctTitles()">GENERATE TITLES</button>
+      <div id="mct-title-output" class="mct-output">Your titles will appear here.</div>
+    </div>
+
+    <div class="mct-card">
+      <h3>🪝 Hook Generator</h3>
+      <p>Create strong opening lines for Shorts and videos.</p>
+      <input id="mct-hook-topic" class="mct-input" placeholder="What is your video about?">
+      <button class="mct-btn" onclick="mctHooks()">GENERATE HOOKS</button>
+      <div id="mct-hook-output" class="mct-output">Your hooks will appear here.</div>
+    </div>
+
+    <div class="mct-card">
+      <h3>📝 Caption Generator</h3>
+      <p>Create ready-to-edit social captions.</p>
+      <input id="mct-caption-topic" class="mct-input" placeholder="Describe your post">
+      <button class="mct-btn" onclick="mctCaption()">GENERATE CAPTION</button>
+      <div id="mct-caption-output" class="mct-output">Your caption will appear here.</div>
+    </div>
+
+    <div class="mct-card">
+      <h3>#️⃣ Hashtag Generator</h3>
+      <p>Get a quick set of relevant hashtags.</p>
+      <input id="mct-hashtag-topic" class="mct-input" placeholder="Enter your topic">
+      <button class="mct-btn" onclick="mctHashtags()">GENERATE HASHTAGS</button>
+      <div id="mct-hashtag-output" class="mct-output">Your hashtags will appear here.</div>
+    </div>
+
+    <div class="mct-card">
+      <h3>📋 Content Checklist</h3>
+      <p>Make sure your post is ready before publishing.</p>
+      <label class="mct-check"><input type="checkbox"> Strong hook</label>
+      <label class="mct-check"><input type="checkbox"> Clear main idea</label>
+      <label class="mct-check"><input type="checkbox"> Good visuals</label>
+      <label class="mct-check"><input type="checkbox"> Captions/subtitles</label>
+      <label class="mct-check"><input type="checkbox"> Title and description</label>
+      <label class="mct-check"><input type="checkbox"> Thumbnail/cover</label>
+      <label class="mct-check"><input type="checkbox"> Final review</label>
+    </div>
+
+    <div class="mct-card mct-full">
+      <h3>💾 Creator Notes</h3>
+      <p>Your private browser-based idea pad. Notes are saved automatically on this device.</p>
+      <textarea id="mct-notes" class="mct-notes" placeholder="Write your ideas, plans, video concepts, project notes..."></textarea>
+      <button class="mct-btn" onclick="mctClearNotes()">CLEAR NOTES</button>
+      <span id="mct-notes-status" class="mct-saved"></span>
+    </div>
+
+  </div>
+</section>
+
+<script id="maniac-creator-tools-script">
+(function(){
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const ideaSets={
+Tech:["3 tech features people wish their phones had","I tested a surprising phone feature","The future of smartphones in 2035","5 gadgets that are actually useful","Tech myths people still believe"],
+Gaming:["The most satisfying gaming moments","5 games that deserve more attention","What makes a game impossible to put down?","Gaming setups on different budgets","The funniest gaming fails"],
+Football:["The most unbelievable football moments","Players who changed the game","Football skills that look impossible","The best young talents to watch","Things only football fans understand"],
+Entertainment:["Movies everyone should see at least once","The funniest celebrity moments","Things that make a movie unforgettable","Unexpected entertainment facts","Best fictional characters and why"],
+School:["Types of students every school has","Things every student secretly understands","The funniest school situations","When the teacher says 'this is easy'","School moments that feel like a movie"],
+General:["Things that just make life better","POV: something everyone can relate to","5 things people secretly love","The most satisfying everyday moments","Things nobody warned you about"]
+};
+window.mctIdea=function(){
+const type=document.getElementById("mct-idea-type").value;
+document.getElementById("mct-idea-output").textContent=pick(ideaSets[type]);
+};
+window.mctTitles=function(){
+const t=document.getElementById("mct-title-topic").value.trim()||"this topic";
+document.getElementById("mct-title-output").textContent=
+"1. You NEED to Know This About "+t+"\n2. I Tried "+t+"... Here's What Happened\n3. The Truth About "+t+"\n4. "+t+" Is NOT What You Think\n5. 5 Things You Should Know About "+t;
+};
+window.mctHooks=function(){
+const t=document.getElementById("mct-hook-topic").value.trim()||"this";
+document.getElementById("mct-hook-output").textContent=
+"• Stop scrolling — you need to see this about "+t+".\n• Nobody talks about this side of "+t+".\n• I didn't expect this to happen with "+t+".\n• Here's something about "+t+" that surprised me.\n• Wait until you see what happens with "+t+".";
+};
+window.mctCaption=function(){
+const t=document.getElementById("mct-caption-topic").value.trim()||"this post";
+document.getElementById("mct-caption-output").textContent=
+"Just had to share this. 👀\n\n"+t+". What do you think?\n\nFollow for more content. 🚀";
+};
+window.mctHashtags=function(){
+const t=(document.getElementById("mct-hashtag-topic").value.trim()||"content").replace(/\s+/g,"");
+document.getElementById("mct-hashtag-output").textContent=
+"#"+t+" #ContentCreator #Creator #Trending #Viral #Shorts #YouTube #TikTok #Reels #MANIAC";
+};
+const notes=document.getElementById("mct-notes");
+const status=document.getElementById("mct-notes-status");
+if(notes){
+notes.value=localStorage.getItem("maniacCreatorNotes")||"";
+notes.addEventListener("input",function(){
+localStorage.setItem("maniacCreatorNotes",notes.value);
+status.textContent="✓ SAVED";
+clearTimeout(window.mctSaveTimer);
+window.mctSaveTimer=setTimeout(()=>status.textContent="",1500);
+});
+}
+window.mctClearNotes=function(){
+if(confirm("Clear all saved creator notes?")){
+notes.value="";
+localStorage.removeItem("maniacCreatorNotes");
+status.textContent="✓ CLEARED";
+}
+};
+})();
+</script><script id="maniac-ai-creator-tools">
+(function(){
+const MANIAC_AI_URL="https://maniacai.thedeterminedteenager.workers.dev/";
+
+async function mctAsk(prompt,outputId,fallback){
+  const out=document.getElementById(outputId);
+  if(!out)return;
+  out.textContent="MANIAC AI IS THINKING...";
+
+  try{
+    const response=await fetch(MANIAC_AI_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:prompt})
+    });
+
+    if(!response.ok)throw new Error("AI request failed");
+
+    const data=await response.json();
+
+    if(!data.response)throw new Error("No AI response");
+
+    out.textContent=data.response;
+  }catch(error){
+    console.warn("MANIAC AI unavailable:",error);
+    out.textContent=fallback;
+  }
+}
+
+window.mctIdea=function(){
+  const type=document.getElementById("mct-idea-type").value;
+  mctAsk(
+    "You are MANIAC AI, the creator assistant for the MANIAC technology website. Generate 5 original content ideas for a "+type+" creator. Make them practical, interesting and suitable for YouTube Shorts, TikTok or Instagram Reels. Number the ideas and keep each concise.",
+    "mct-idea-output",
+    "MANIAC AI is temporarily unavailable. Try again in a moment."
+  );
+};
+
+window.mctTitles=function(){
+  const topic=document.getElementById("mct-title-topic").value.trim()||"the creator's topic";
+  mctAsk(
+    "You are MANIAC AI helping a content creator. Generate 7 strong YouTube/TikTok video titles about: "+topic+". Make them attention-grabbing without using misleading clickbait. Number them.",
+    "mct-title-output",
+    "MANIAC AI is temporarily unavailable. Try again in a moment."
+  );
+};
+
+window.mctHooks=function(){
+  const topic=document.getElementById("mct-hook-topic").value.trim()||"the creator's topic";
+  mctAsk(
+    "You are MANIAC AI helping a short-form video creator. Write 7 powerful opening hooks for a video about: "+topic+". Make each hook short, natural and designed to make viewers keep watching. Number them.",
+    "mct-hook-output",
+    "MANIAC AI is temporarily unavailable. Try again in a moment."
+  );
+};
+
+window.mctCaption=function(){
+  const topic=document.getElementById("mct-caption-topic").value.trim()||"the creator's post";
+  mctAsk(
+    "You are MANIAC AI helping a social media creator. Write 3 different captions for a post about: "+topic+". Give one energetic caption, one funny caption and one clean professional caption. Keep them ready to edit and post.",
+    "mct-caption-output",
+    "MANIAC AI is temporarily unavailable. Try again in a moment."
+  );
+};
+
+window.mctHashtags=function(){
+  const topic=document.getElementById("mct-hashtag-topic").value.trim()||"content creation";
+  mctAsk(
+    "You are MANIAC AI helping a social media creator. Generate a useful set of relevant hashtags for content about: "+topic+". Avoid completely unrelated hashtags. Give them in one easy-to-copy line.",
+    "mct-hashtag-output",
+    "MANIAC AI is temporarily unavailable. Try again in a moment."
+  );
+};
+})();
+</script><style id="maniac-image-lab-style">
+#maniac-image-lab{max-width:1150px;margin:80px auto 50px;padding:0 20px;font-family:Arial,sans-serif}
+.mil-head{text-align:center;margin-bottom:35px}
+.mil-head .eyebrow{color:#00f6ff;font-size:12px;font-weight:900;letter-spacing:4px}
+.mil-head h2{color:#fff;font-size:clamp(30px,5vw,52px);margin:10px 0;text-shadow:0 0 18px rgba(0,246,255,.4)}
+.mil-head p{color:#91a0ad}
+.mil-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.mil-card{background:rgba(5,10,16,.9);border:1px solid rgba(0,246,255,.2);border-radius:18px;padding:20px;box-shadow:0 0 25px rgba(0,246,255,.06)}
+.mil-card h3{color:#00f6ff;margin-top:0}
+.mil-textarea{width:100%;box-sizing:border-box;min-height:145px;resize:vertical;background:#080d13;color:#fff;border:1px solid #26333f;border-radius:10px;padding:13px;font:inherit;outline:none}
+.mil-textarea:focus{border-color:#00f6ff;box-shadow:0 0 12px rgba(0,246,255,.12)}
+.mil-controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.mil-btn{border:1px solid #00f6ff;background:rgba(0,246,255,.07);color:#00f6ff;border-radius:9px;padding:10px 14px;font-weight:900;cursor:pointer;transition:.2s}
+.mil-btn:hover{background:#00f6ff;color:#05070a;box-shadow:0 0 15px rgba(0,246,255,.45)}
+.mil-file{display:block;width:100%;box-sizing:border-box;color:#b9c6d2;margin:10px 0}
+.mil-status{color:#00f6ff;font-size:12px;margin-top:10px;min-height:18px}
+.mil-preview{display:none;width:100%;max-height:430px;object-fit:contain;background:#000;border-radius:12px;margin-top:15px}
+.mil-output{margin-top:12px;min-height:90px;background:rgba(0,246,255,.035);border:1px solid rgba(0,246,255,.12);border-radius:10px;padding:13px;color:#dcecff;white-space:pre-wrap;line-height:1.6}
+.mil-download{display:none;text-decoration:none;text-align:center}
+@media(max-width:850px){.mil-grid{grid-template-columns:1fr}}
+</style>
+
+<section id="maniac-image-lab">
+  <div class="mil-head">
+    <div class="eyebrow">MANIAC // AI CREATIVE SYSTEM</div>
+    <h2>AI IMAGE LAB</h2>
+    <p>Generate new images with MANIAC AI or analyze images with MANIAC AI Vision.</p>
+  </div>
+
+  <div class="mil-grid">
+
+    <div class="mil-card">
+      <h3>🎨 IMAGE GENERATOR</h3>
+      <p style="color:#91a0ad;font-size:14px">
+        Describe the image you want MANIAC AI to create.
+      </p>
+
+      <textarea id="mil-generate-prompt" class="mil-textarea"
+        placeholder="Example: A futuristic MANIAC smartphone floating above a neon city at night..."></textarea>
+
+      <div class="mil-controls">
+        <button class="mil-btn" id="mil-generate">⚡ GENERATE IMAGE</button>
+        <a class="mil-btn mil-download" id="mil-download" download="maniac-ai-generated.jpg">⬇ DOWNLOAD IMAGE</a>
+      </div>
+
+      <div id="mil-generate-status" class="mil-status"></div>
+      <img id="mil-generated-image" class="mil-preview" alt="MANIAC AI generated image">
+    </div>
+
+    <div class="mil-card">
+      <h3>👁️ IMAGE ANALYZER</h3>
+      <p style="color:#91a0ad;font-size:14px">
+        Upload an image and ask MANIAC AI Vision what it sees.
+      </p>
+
+      <input id="mil-image-input" class="mil-file" type="file" accept="image/*">
+
+      <textarea id="mil-analyze-prompt" class="mil-textarea"
+        placeholder="Example: Describe this image and suggest how I could edit it for a short video."></textarea>
+
+      <div class="mil-controls">
+        <button class="mil-btn" id="mil-analyze">🔍 ANALYZE IMAGE</button>
+      </div>
+
+      <div id="mil-analyze-status" class="mil-status"></div>
+      <img id="mil-analysis-preview" class="mil-preview" alt="Uploaded image preview">
+      <div id="mil-analysis-output" class="mil-output">Your MANIAC AI Vision analysis will appear here.</div>
+    </div>
+
+  </div>
+</section>
+
+<script id="maniac-image-lab-script">
+(function(){
+
+const BASE_URL="https://maniacai.thedeterminedteenager.workers.dev";
+
+const generateButton=document.getElementById("mil-generate");
+const generatePrompt=document.getElementById("mil-generate-prompt");
+const generateStatus=document.getElementById("mil-generate-status");
+const generatedImage=document.getElementById("mil-generated-image");
+const downloadButton=document.getElementById("mil-download");
+
+const imageInput=document.getElementById("mil-image-input");
+const analyzeButton=document.getElementById("mil-analyze");
+const analyzePrompt=document.getElementById("mil-analyze-prompt");
+const analyzeStatus=document.getElementById("mil-analyze-status");
+const analysisPreview=document.getElementById("mil-analysis-preview");
+const analysisOutput=document.getElementById("mil-analysis-output");
+
+async function compressImage(file){
+
+  return new Promise(function(resolve,reject){
+
+    const reader=new FileReader();
+
+    reader.onload=function(){
+
+      const image=new Image();
+
+      image.onload=function(){
+
+        const maxSize=1600;
+        let width=image.width;
+        let height=image.height;
+
+        if(width>maxSize||height>maxSize){
+
+          const scale=Math.min(maxSize/width,maxSize/height);
+
+          width=Math.round(width*scale);
+          height=Math.round(height*scale);
+        }
+
+        const canvas=document.createElement("canvas");
+        canvas.width=width;
+        canvas.height=height;
+
+        const context=canvas.getContext("2d");
+
+        if(!context){
+          reject(new Error("Canvas unavailable."));
+          return;
+        }
+
+        context.drawImage(image,0,0,width,height);
+
+        resolve(canvas.toDataURL("image/jpeg",0.82));
+      };
+
+      image.onerror=function(){
+        reject(new Error("Could not read image."));
+      };
+
+      image.src=reader.result;
+    };
+
+    reader.onerror=function(){
+      reject(new Error("Could not load image."));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+generateButton.addEventListener("click",async function(){
+
+  const prompt=generatePrompt.value.trim();
+
+  if(!prompt){
+    generateStatus.textContent="Enter an image description first.";
+    return;
+  }
+
+  generateButton.disabled=true;
+  generateStatus.textContent="MANIAC AI IS GENERATING YOUR IMAGE...";
+  generatedImage.style.display="none";
+  downloadButton.style.display="none";
+
+  try{
+
+    const response=await fetch(BASE_URL+"/generate",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        prompt:prompt
+      })
+    });
+
+    const data=await response.json();
+
+    if(!response.ok||!data.image){
+      throw new Error(data.details||data.error||"Image generation failed.");
+    }
+
+    generatedImage.src=data.image;
+    generatedImage.style.display="block";
+
+    downloadButton.href=data.image;
+    downloadButton.style.display="inline-block";
+
+    generateStatus.textContent="✓ IMAGE GENERATED SUCCESSFULLY";
+
+  }catch(error){
+
+    console.error(error);
+
+    generateStatus.textContent="IMAGE GENERATION FAILED: "+error.message;
+  }
+
+  generateButton.disabled=false;
+});
+
+analyzeButton.addEventListener("click",async function(){
+
+  const file=imageInput.files[0];
+
+  if(!file){
+    analyzeStatus.textContent="Select an image first.";
+    return;
+  }
+
+  analyzeButton.disabled=true;
+  analyzeStatus.textContent="PREPARING IMAGE...";
+  analysisOutput.textContent="";
+
+  try{
+
+    const imageData=await compressImage(file);
+
+    analysisPreview.src=imageData;
+    analysisPreview.style.display="block";
+
+    analyzeStatus.textContent="MANIAC AI VISION IS ANALYZING...";
+
+    const prompt=analyzePrompt.value.trim()||"Analyze this image carefully. Describe what is visible and give useful observations.";
+
+    const response=await fetch(BASE_URL+"/vision",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        image:imageData,
+        message:prompt
+      })
+    });
+
+    const data=await response.json();
+
+    if(!response.ok||!data.response){
+      throw new Error(data.details||data.error||"Image analysis failed.");
+    }
+
+    analysisOutput.textContent=data.response;
+    analyzeStatus.textContent="✓ MANIAC AI VISION ANALYSIS READY";
+
+  }catch(error){
+
+    console.error(error);
+
+    analyzeStatus.textContent="IMAGE ANALYSIS FAILED";
+    analysisOutput.textContent=error.message;
+
+  }
+
+  analyzeButton.disabled=false;
+});
+
+})();
+</script>
+<style id="maniac-video-studio-style">
+#maniac-video-studio{max-width:1150px;margin:80px auto 50px;padding:0 20px;font-family:Arial,sans-serif}
+.mvs-head{text-align:center;margin-bottom:35px}
+.mvs-head .eyebrow{color:#00f6ff;font-size:12px;font-weight:900;letter-spacing:4px}
+.mvs-head h2{color:#fff;font-size:clamp(30px,5vw,52px);margin:10px 0;text-shadow:0 0 18px rgba(0,246,255,.4)}
+.mvs-head p{color:#91a0ad}
+.mvs-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:20px}
+.mvs-card{background:rgba(5,10,16,.9);border:1px solid rgba(0,246,255,.2);border-radius:18px;padding:20px;box-shadow:0 0 25px rgba(0,246,255,.06)}
+.mvs-card h3{color:#00f6ff;margin-top:0}
+#mvs-file{width:100%;margin-bottom:15px;color:#b9c6d2}
+#mvs-video{width:100%;max-height:520px;background:#000;border-radius:12px;display:block}
+.mvs-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.mvs-btn{border:1px solid #00f6ff;background:rgba(0,246,255,.07);color:#00f6ff;border-radius:9px;padding:9px 13px;font-weight:900;cursor:pointer;transition:.2s}
+.mvs-btn:hover{background:#00f6ff;color:#05070a;box-shadow:0 0 15px rgba(0,246,255,.45)}
+.mvs-time{color:#9db0bd;font-size:13px;margin-top:10px}
+#mvs-range{width:100%;accent-color:#00f6ff;margin-top:5px}
+.mvs-info{color:#aab8c4;font-size:13px;line-height:1.7;margin-top:10px}
+.mvs-prompt{width:100%;box-sizing:border-box;min-height:125px;resize:vertical;background:#080d13;color:#fff;border:1px solid #26333f;border-radius:10px;padding:12px;font:inherit;outline:none}
+.mvs-prompt:focus{border-color:#00f6ff;box-shadow:0 0 12px rgba(0,246,255,.12)}
+#mvs-ai-output{margin-top:12px;min-height:120px;background:rgba(0,246,255,.035);border:1px solid rgba(0,246,255,.12);border-radius:10px;padding:13px;color:#dcecff;white-space:pre-wrap;line-height:1.6}
+.mvs-status{color:#00f6ff;font-size:12px;margin-top:8px}
+@media(max-width:850px){.mvs-grid{grid-template-columns:1fr}}
+</style>
+
+<section id="maniac-video-studio">
+  <div class="mvs-head">
+    <div class="eyebrow">MANIAC // CREATOR SYSTEM</div>
+    <h2>VIDEO STUDIO</h2>
+    <p>Your browser-based video workspace, connected to MANIAC AI.</p>
+  </div>
+
+  <div class="mvs-grid">
+
+    <div class="mvs-card">
+      <h3>🎬 VIDEO PLAYER</h3>
+
+      <input id="mvs-file" type="file" accept="video/*">
+
+      <video id="mvs-video" controls playsinline>
+        Your browser does not support video playback.
+      </video>
+
+      <input id="mvs-range" type="range" min="0" max="100" value="0">
+
+      <div class="mvs-time">
+        <span id="mvs-current">00:00</span> /
+        <span id="mvs-duration">00:00</span>
+      </div>
+
+      <div class="mvs-controls">
+        <button class="mvs-btn" id="mvs-play">▶ PLAY</button>
+        <button class="mvs-btn" id="mvs-back">↶ -5 SEC</button>
+        <button class="mvs-btn" id="mvs-forward">+5 SEC ↷</button>
+        <button class="mvs-btn" id="mvs-mute">🔊 MUTE</button>
+        <button class="mvs-btn" id="mvs-fullscreen">⛶ FULLSCREEN</button>
+      </div>
+
+      <div class="mvs-controls">
+        <button class="mvs-btn" data-speed="0.5">0.5×</button>
+        <button class="mvs-btn" data-speed="1">1×</button>
+        <button class="mvs-btn" data-speed="1.5">1.5×</button>
+        <button class="mvs-btn" data-speed="2">2×</button>
+      </div>
+
+      <div id="mvs-info" class="mvs-info">
+        No video loaded. Choose a video file above to begin.
+      </div>
+    </div>
+
+    <div class="mvs-card">
+      <h3>🤖 AI EDIT ASSISTANT</h3>
+      <p style="color:#91a0ad;font-size:14px">
+        Tell MANIAC AI what you want your video to become.
+      </p>
+
+      <textarea id="mvs-prompt" class="mvs-prompt"
+        placeholder="Example: Turn this into a fast-paced 30-second TikTok about my gaming setup."></textarea>
+
+      <div class="mvs-controls">
+        <button class="mvs-btn" id="mvs-ai">⚡ ASK MANIAC AI</button>
+      </div>
+
+      <div id="mvs-ai-status" class="mvs-status"></div>
+      <div id="mvs-ai-output">Your AI editing plan will appear here.</div>
+    </div>
+
+  </div>
+</section>
+
+<script id="maniac-video-studio-script">
+(function(){
+
+const video=document.getElementById("mvs-video");
+const file=document.getElementById("mvs-file");
+const range=document.getElementById("mvs-range");
+const current=document.getElementById("mvs-current");
+const duration=document.getElementById("mvs-duration");
+const info=document.getElementById("mvs-info");
+
+function timeFormat(seconds){
+  if(!Number.isFinite(seconds))return"00:00";
+  const m=Math.floor(seconds/60);
+  const s=Math.floor(seconds%60).toString().padStart(2,"0");
+  return String(m).padStart(2,"0")+":"+s;
+}
+
+file.addEventListener("change",function(){
+  const selected=file.files&&file.files[0];
+  if(!selected)return;
+
+  if(window.mvsObjectURL){
+    URL.revokeObjectURL(window.mvsObjectURL);
+  }
+
+  window.mvsObjectURL=URL.createObjectURL(selected);
+  video.src=window.mvsObjectURL;
+  video.load();
+
+  info.textContent=
+    "FILE: "+selected.name+
+    " • SIZE: "+(selected.size/1024/1024).toFixed(2)+" MB"+
+    " • TYPE: "+(selected.type||"video");
+});
+
+video.addEventListener("loadedmetadata",function(){
+  duration.textContent=timeFormat(video.duration);
+  range.max=video.duration;
+});
+
+video.addEventListener("timeupdate",function(){
+  current.textContent=timeFormat(video.currentTime);
+  if(video.duration){
+    range.value=video.currentTime;
+  }
+});
+
+document.getElementById("mvs-play").onclick=function(){
+  if(video.paused)video.play();
+  else video.pause();
+};
+
+document.getElementById("mvs-back").onclick=function(){
+  video.currentTime=Math.max(0,video.currentTime-5);
+};
+
+document.getElementById("mvs-forward").onclick=function(){
+  video.currentTime=Math.min(video.duration||0,video.currentTime+5);
+};
+
+document.getElementById("mvs-mute").onclick=function(){
+  video.muted=!video.muted;
+  this.textContent=video.muted?"🔇 UNMUTE":"🔊 MUTE";
+};
+
+document.getElementById("mvs-fullscreen").onclick=function(){
+  if(video.requestFullscreen)video.requestFullscreen();
+  else if(video.webkitRequestFullscreen)video.webkitRequestFullscreen();
+};
+
+range.addEventListener("input",function(){
+  if(video.duration)video.currentTime=Number(range.value);
+});
+
+document.querySelectorAll("[data-speed]").forEach(function(button){
+  button.addEventListener("click",function(){
+    video.playbackRate=Number(this.dataset.speed);
+  });
+});
+
+document.getElementById("mvs-ai").onclick=async function(){
+
+  const prompt=document.getElementById("mvs-prompt").value.trim();
+  const output=document.getElementById("mvs-ai-output");
+  const status=document.getElementById("mvs-ai-status");
+
+  if(!prompt){
+    output.textContent="Tell MANIAC AI what you want to create first.";
+    return;
+  }
+
+  status.textContent="MANIAC AI IS ANALYZING YOUR EDIT...";
+  output.textContent="";
+
+  const videoLoaded=video.src&&video.readyState>=1;
+  const videoInfo=videoLoaded
+    ? "A video is loaded in the browser. The assistant cannot directly inspect its frames yet, so provide an editing plan based on the creator's description."
+    : "No video is currently loaded.";
+
+  const message=
+    "You are MANIAC AI, an advanced creator and video-editing assistant. "+
+    "The creator is using the MANIAC Creator Video Studio. "+
+    videoInfo+
+    " The creator wants: "+prompt+
+    "\n\nCreate a practical editing blueprint. Include suggested hook, pacing, cuts, captions, transitions, music/sound direction, ending/CTA, and approximate timing when useful. "+
+    "Be concise but useful. Do not claim that you directly watched or analyzed the video.";
+
+  try{
+
+    const response=await fetch(
+      "https://maniacai.thedeterminedteenager.workers.dev/",
+      {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:message})
+      }
+    );
+
+    if(!response.ok)throw new Error("Request failed");
+
+    const data=await response.json();
+
+    if(!data.response)throw new Error("No AI response");
+
+    output.textContent=data.response;
+    status.textContent="✓ MANIAC AI RESPONSE READY";
+
+  }catch(error){
+
+    console.error(error);
+
+    status.textContent="MANIAC AI CONNECTION FAILED";
+    output.textContent="MANIAC AI could not be reached right now. Check your connection and try again.";
+
+  }
+
+};
+
+})();
+</script><section id="maniac-video-ai" style="margin-top:40px;padding:28px;border:1px solid rgba(0,246,255,.35);border-radius:18px;background:linear-gradient(145deg,rgba(0,246,255,.045),rgba(5,7,10,.9));box-shadow:0 0 25px rgba(0,246,255,.08)">
+<h2 style="color:#00f6ff;margin:0 0 8px;font-size:clamp(24px,4vw,38px);text-shadow:0 0 12px rgba(0,246,255,.45)">MANIAC AI VIDEO ANALYZER</h2>
+<p style="color:#9fb8bd;margin:0 0 20px">Upload a video and let MANIAC AI Vision actually examine its frames.</p>
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+<label style="display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border:1px solid #00f6ff;border-radius:10px;color:#00f6ff;font-weight:800;cursor:pointer;background:rgba(0,246,255,.06)">
+SELECT VIDEO
+<input id="maniac-video-ai-input" type="file" accept="video/*" style="display:none">
+</label>
+
+<button id="maniac-video-ai-analyze" type="button" disabled style="padding:12px 18px;border:1px solid #00f6ff;border-radius:10px;background:#00f6ff;color:#05070a;font-weight:900;cursor:pointer">
+ANALYZE VIDEO
+</button>
+</div>
+
+<div id="maniac-video-ai-info" style="margin-top:15px;color:#9fb8bd">No video selected.</div>
+
+<video id="maniac-video-ai-player" controls playsinline style="display:none;width:100%;max-height:420px;margin-top:20px;border-radius:12px;background:#000"></video>
+
+<div id="maniac-video-ai-progress" style="display:none;margin-top:20px">
+<div style="color:#00f6ff;font-weight:800;margin-bottom:8px">MANIAC AI VISION STATUS</div>
+<div style="height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden">
+<div id="maniac-video-ai-bar" style="width:0%;height:100%;background:#00f6ff;box-shadow:0 0 12px #00f6ff;transition:width .25s"></div>
+</div>
+<div id="maniac-video-ai-status" style="margin-top:10px;color:#9fb8bd">Preparing...</div>
+</div>
+
+<div id="maniac-video-ai-results" style="display:none;margin-top:25px">
+<h3 style="color:#00f6ff;margin-bottom:10px">VIDEO ANALYSIS</h3>
+<div id="maniac-video-ai-report" style="white-space:pre-wrap;line-height:1.65;color:#e8f5f7;padding:18px;border:1px solid rgba(0,246,255,.2);border-radius:12px;background:rgba(0,0,0,.25)"></div>
+</div>
+</section>
+
+<script>
+(function(){
+const input=document.getElementById("maniac-video-ai-input");
+const analyze=document.getElementById("maniac-video-ai-analyze");
+const player=document.getElementById("maniac-video-ai-player");
+const info=document.getElementById("maniac-video-ai-info");
+const progress=document.getElementById("maniac-video-ai-progress");
+const bar=document.getElementById("maniac-video-ai-bar");
+const status=document.getElementById("maniac-video-ai-status");
+const results=document.getElementById("maniac-video-ai-results");
+const report=document.getElementById("maniac-video-ai-report");
+const AI_URL="https://maniacai.thedeterminedteenager.workers.dev/vision";
+let videoFile=null;
+
+if(!input||!analyze||!player)return;
+
+input.addEventListener("change",function(){
+videoFile=input.files&&input.files[0];
+if(!videoFile)return;
+
+player.src=URL.createObjectURL(videoFile);
+player.style.display="block";
+analyze.disabled=false;
+info.textContent=videoFile.name+" • "+(videoFile.size/1024/1024).toFixed(2)+" MB";
+results.style.display="none";
+});
+
+function waitForEvent(element,event){
+return new Promise(function(resolve){
+element.addEventListener(event,resolve,{once:true});
+});
+}
+
+async function getVideoDuration(){
+if(Number.isFinite(player.duration)&&player.duration>0)return player.duration;
+await waitForEvent(player,"loadedmetadata");
+return player.duration;
+}
+
+function captureFrame(time){
+return new Promise(function(resolve,reject){
+const canvas=document.createElement("canvas");
+const width=640;
+const ratio=player.videoHeight/player.videoWidth||9/16;
+canvas.width=width;
+canvas.height=Math.max(360,Math.round(width*ratio));
+
+const done=function(){
+try{
+const ctx=canvas.getContext("2d");
+ctx.drawImage(player,0,0,canvas.width,canvas.height);
+resolve(canvas.toDataURL("image/jpeg",.78));
+}catch(e){reject(e);}
+};
+
+const previous=player.currentTime;
+player.currentTime=Math.min(Math.max(0,time),Math.max(0,player.duration-.05));
+player.addEventListener("seeked",function(){
+done();
+player.currentTime=previous;
+},{once:true});
+});
+}
+
+async function analyzeFrame(image,index,total,time){
+const response=await fetch(AI_URL,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+image:image,
+message:
+"You are analyzing frame "+(index+1)+" of "+total+" from a video. "+
+"The frame occurs around "+time.toFixed(2)+" seconds. "+
+"Describe only what is visibly present. Identify subjects, actions, setting, visible text, "+
+"composition, important visual moments, and anything relevant to video editing. "+
+"Be concise but specific."
+})
+});
+
+const data=await response.json();
+
+if(!response.ok){
+throw new Error(data.details||data.error||"Vision request failed.");
+}
+
+return data.response||"No analysis returned.";
+}
+
+analyze.addEventListener("click",async function(){
+if(!videoFile)return;
+
+analyze.disabled=true;
+progress.style.display="block";
+results.style.display="none";
+report.textContent="";
+bar.style.width="0%";
+
+try{
+const duration=await getVideoDuration();
+
+if(!Number.isFinite(duration)||duration<=0){
+throw new Error("Could not determine the video's duration.");
+}
+
+const maxFrames=8;
+const count=Math.min(maxFrames,Math.max(3,Math.ceil(duration/12)));
+const frames=[];
+
+for(let i=0;i<count;i++){
+const time=count===1?0:(duration*(i/(count-1)));
+status.textContent="Extracting frame "+(i+1)+" of "+count+"...";
+bar.style.width=((i/count)*35)+"%";
+const image=await captureFrame(time);
+frames.push({image:image,time:time});
+}
+
+const analyses=[];
+
+for(let i=0;i<frames.length;i++){
+status.textContent="MANIAC AI Vision analyzing frame "+(i+1)+" of "+frames.length+"...";
+bar.style.width=(35+(i/frames.length)*60)+"%";
+
+const answer=await analyzeFrame(
+frames[i].image,
+i,
+frames.length,
+frames[i].time
+);
+
+analyses.push(
+"FRAME "+(i+1)+" • "+frames[i].time.toFixed(2)+"s\n"+answer
+);
+}
+
+status.textContent="Building final video report...";
+bar.style.width="100%";
+
+report.textContent=
+"MANIAC AI VIDEO ANALYSIS\n"+
+"Duration: "+duration.toFixed(2)+" seconds\n"+
+"Frames analyzed: "+frames.length+"\n\n"+
+analyses.join("\n\n");
+
+results.style.display="block";
+status.textContent="Analysis complete.";
+
+}catch(error){
+status.textContent="Analysis failed.";
+report.textContent="ERROR:\n\n"+error.message;
+results.style.display="block";
+}finally{
+analyze.disabled=false;
+}
+});
+
+})();
+</script><!-- MANIAC_VIDEO_EDITOR_PHASE1 -->
+<section id="maniac-real-editor" style="margin-top:40px;padding:28px;border:1px solid rgba(0,246,255,.35);border-radius:18px;background:linear-gradient(145deg,rgba(0,246,255,.045),rgba(5,7,10,.92));box-shadow:0 0 25px rgba(0,246,255,.08)">
+<h2 style="color:#00f6ff;margin:0 0 8px;font-size:clamp(24px,4vw,38px);text-shadow:0 0 12px rgba(0,246,255,.45)">MANIAC VIDEO EDITOR</h2>
+<p style="color:#9fb8bd;margin:0 0 20px">REAL BROWSER-BASED VIDEO EDITING // PHASE 1</p>
+
+<div style="display:grid;gap:18px">
+<div>
+<label style="display:block;color:#d9faff;font-weight:800;margin-bottom:8px">VIDEO FILE</label>
+<input id="maniac-editor-input" type="file" accept="video/*" style="width:100%;padding:12px;border:1px solid rgba(0,246,255,.3);border-radius:10px;background:#080d11;color:#d9faff">
+</div>
+
+<video id="maniac-editor-video" controls playsinline style="width:100%;max-height:520px;background:#000;border-radius:14px;border:1px solid rgba(0,246,255,.18)"></video>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px">
+<div style="padding:16px;border:1px solid rgba(0,246,255,.18);border-radius:12px;background:rgba(0,0,0,.2)">
+<label style="display:block;color:#9fb8bd;font-size:13px;margin-bottom:7px">START TIME (SECONDS)</label>
+<input id="maniac-editor-start" type="number" min="0" step="0.1" value="0" style="width:100%;padding:11px;border-radius:9px;border:1px solid rgba(0,246,255,.25);background:#05070a;color:#fff">
+</div>
+
+<div style="padding:16px;border:1px solid rgba(0,246,255,.18);border-radius:12px;background:rgba(0,0,0,.2)">
+<label style="display:block;color:#9fb8bd;font-size:13px;margin-bottom:7px">END TIME (SECONDS)</label>
+<input id="maniac-editor-end" type="number" min="0" step="0.1" value="0" style="width:100%;padding:11px;border-radius:9px;border:1px solid rgba(0,246,255,.25);background:#05070a;color:#fff">
+</div>
+</div>
+
+<div>
+<label style="display:block;color:#9fb8bd;font-size:13px;margin-bottom:7px">TRIM RANGE</label>
+<input id="maniac-editor-range" type="range" min="0" max="100" value="0" step="0.1" style="width:100%">
+<div style="display:flex;justify-content:space-between;color:#8ca3a8;font-size:12px">
+<span id="maniac-editor-range-label">0.0s</span>
+<span id="maniac-editor-duration">0.0s</span>
+</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<button id="maniac-editor-preview" type="button" style="padding:12px 17px;border:1px solid #00f6ff;border-radius:10px;background:rgba(0,246,255,.08);color:#00f6ff;font-weight:800;cursor:pointer">▶ PREVIEW SELECTION</button>
+<button id="maniac-editor-reset" type="button" style="padding:12px 17px;border:1px solid rgba(255,255,255,.25);border-radius:10px;background:rgba(255,255,255,.05);color:#fff;font-weight:800;cursor:pointer">↺ RESET</button>
+<button id="maniac-editor-export" type="button" disabled style="padding:12px 17px;border:1px solid rgba(0,246,255,.35);border-radius:10px;background:rgba(0,246,255,.04);color:#6d858a;font-weight:800;cursor:not-allowed">✂ EXPORT TRIMMED MP4</button>
+</div>
+
+<div style="padding:16px;border-radius:12px;border:1px solid rgba(0,246,255,.15);background:rgba(0,0,0,.18)">
+<div id="maniac-editor-status" style="color:#9fb8bd">Choose a video to begin.</div>
+<div style="height:8px;margin-top:12px;background:#10171b;border-radius:99px;overflow:hidden">
+<div id="maniac-editor-progress" style="height:100%;width:0%;background:#00f6ff;box-shadow:0 0 12px rgba(0,246,255,.8);transition:width .2s"></div>
+</div>
+</div>
+
+<div id="maniac-editor-output-wrap" style="display:none">
+<h3 style="color:#00f6ff;margin:8px 0">EXPORTED RESULT</h3>
+<video id="maniac-editor-output" controls playsinline style="width:100%;max-height:520px;background:#000;border-radius:14px;border:1px solid rgba(0,246,255,.18)"></video>
+<a id="maniac-editor-download" download="maniac-edited.mp4" style="display:inline-block;margin-top:12px;padding:12px 17px;border-radius:10px;background:#00f6ff;color:#05070a;font-weight:900;text-decoration:none">⬇ DOWNLOAD EDITED VIDEO</a>
+</div>
+</div>
+</section>
+
+<script>
+(function(){
+const input=document.getElementById("maniac-editor-input");
+const video=document.getElementById("maniac-editor-video");
+const output=document.getElementById("maniac-editor-output");
+const start=document.getElementById("maniac-editor-start");
+const end=document.getElementById("maniac-editor-end");
+const range=document.getElementById("maniac-editor-range");
+const durationLabel=document.getElementById("maniac-editor-duration");
+const rangeLabel=document.getElementById("maniac-editor-range-label");
+const status=document.getElementById("maniac-editor-status");
+const progress=document.getElementById("maniac-editor-progress");
+const preview=document.getElementById("maniac-editor-preview");
+const reset=document.getElementById("maniac-editor-reset");
+const exportBtn=document.getElementById("maniac-editor-export");
+const outputWrap=document.getElementById("maniac-editor-output-wrap");
+const download=document.getElementById("maniac-editor-download");
+
+if(!input||!video)return;
+
+let file=null;
+let duration=0;
+let inputURL=null;
+let outputURL=null;
+let ffmpeg=null;
+let ffmpegLoaded=false;
+
+function setStatus(text){
+status.textContent=text;
+}
+
+function clamp(n,min,max){
+return Math.min(Math.max(Number(n)||0,min),max);
+}
+
+function syncRange(){
+if(!duration)return;
+const s=clamp(start.value,0,duration);
+const e=clamp(end.value,s,duration);
+start.value=s.toFixed(1);
+end.value=e.toFixed(1);
+range.value=((e/duration)*100).toFixed(1);
+rangeLabel.textContent=e.toFixed(1)+"s";
+durationLabel.textContent=duration.toFixed(1)+"s";
+}
+
+input.addEventListener("change",function(){
+file=input.files&&input.files[0];
+if(!file)return;
+
+if(inputURL)URL.revokeObjectURL(inputURL);
+inputURL=URL.createObjectURL(file);
+video.src=inputURL;
+outputWrap.style.display="none";
+setStatus("Loading video...");
+progress.style.width="0%";
+exportBtn.disabled=true;
+exportBtn.style.color="#6d858a";
+exportBtn.style.cursor="not-allowed";
+});
+
+video.addEventListener("loadedmetadata",function(){
+duration=Number(video.duration)||0;
+start.value="0";
+end.value=duration.toFixed(1);
+syncRange();
+exportBtn.disabled=false;
+exportBtn.style.color="#00f6ff";
+exportBtn.style.cursor="pointer";
+setStatus("Video loaded. Choose a start and end point.");
+});
+
+start.addEventListener("input",function(){
+let s=clamp(start.value,0,duration);
+let e=clamp(end.value,s,duration);
+start.value=s;
+end.value=e;
+syncRange();
+});
+
+end.addEventListener("input",function(){
+let e=clamp(end.value,0,duration);
+let s=clamp(start.value,0,e);
+start.value=s;
+end.value=e;
+syncRange();
+});
+
+range.addEventListener("input",function(){
+if(!duration)return;
+const e=(Number(range.value)/100)*duration;
+end.value=e.toFixed(1);
+syncRange();
+});
+
+preview.addEventListener("click",function(){
+if(!duration)return;
+const s=clamp(start.value,0,duration);
+video.currentTime=s;
+video.play();
+setStatus("Previewing selected section...");
+
+function stopAtEnd(){
+if(video.currentTime>=clamp(end.value,s,duration)){
+video.pause();
+video.removeEventListener("timeupdate",stopAtEnd);
+setStatus("Selection preview finished.");
+}
+}
+video.addEventListener("timeupdate",stopAtEnd);
+});
+
+reset.addEventListener("click",function(){
+if(!duration)return;
+start.value="0";
+end.value=duration.toFixed(1);
+video.currentTime=0;
+syncRange();
+setStatus("Selection reset to the full video.");
+});
+
+async function loadFFmpeg(){
+if(ffmpegLoaded)return;
+
+setStatus("Loading MANIAC editing engine (~31 MB)...");
+
+const [{FFmpeg},{fetchFile,toBlobURL}]=await Promise.all([
+import("./ffmpeg/wrapper/esm/index.js"),
+import("./ffmpeg/util.js")
+]);
+
+ffmpeg=new FFmpeg();
+
+ffmpeg.on("progress",function(data){
+const pct=Math.max(0,Math.min(100,Math.round((data.progress||0)*100)));
+progress.style.width=pct+"%";
+setStatus("Rendering video... "+pct+"%");
+});
+
+const baseURL="./ffmpeg/core";
+
+await ffmpeg.load({
+coreURL:await toBlobURL(baseURL+"/ffmpeg-core.js","text/javascript"),
+wasmURL:await toBlobURL(baseURL+"/ffmpeg-core.wasm","application/wasm")
+});
+
+ffmpegLoaded=true;
+setStatus("MANIAC editing engine ready.");
+}
+
+exportBtn.addEventListener("click",async function(){
+if(!file||!duration)return;
+
+const s=clamp(start.value,0,duration);
+const e=clamp(end.value,s,duration);
+
+if(e<=s){
+setStatus("End time must be greater than start time.");
+return;
+}
+
+exportBtn.disabled=true;
+progress.style.width="0%";
+outputWrap.style.display="none";
+
+try{
+await loadFFmpeg();
+
+setStatus("Preparing video...");
+await ffmpeg.writeFile("maniac-input.mp4",await (await import("./ffmpeg/util.js")).fetchFile(file));
+
+setStatus("Cutting selected section...");
+
+await ffmpeg.exec([
+"-ss",String(s),
+"-i","maniac-input.mp4",
+"-t",String(e-s),
+"-c:v","libx264",
+"-preset","veryfast",
+"-crf","23",
+"-c:a","aac",
+"-movflags","+faststart",
+"maniac-output.mp4"
+]);
+
+const data=await ffmpeg.readFile("maniac-output.mp4");
+
+if(outputURL)URL.revokeObjectURL(outputURL);
+outputURL=URL.createObjectURL(new Blob([data.buffer],{type:"video/mp4"}));
+
+output.src=outputURL;
+download.href=outputURL;
+outputWrap.style.display="block";
+progress.style.width="100%";
+setStatus("Export complete. Your trimmed MP4 is ready.");
+}catch(error){
+console.error(error);
+setStatus("Export failed: "+String(error&&error.message?error.message:error));
+}finally{
+exportBtn.disabled=false;
+}
+});
+})();
+</script>
+<!-- /MANIAC_VIDEO_EDITOR_PHASE1 -->
+<!-- MANIAC_VIDEO_EDITOR_PHASE2 -->
+<section id="maniac-real-editor" style="margin-top:30px;padding:28px;border:1px solid rgba(0,246,255,.35);border-radius:18px;background:linear-gradient(145deg,rgba(0,246,255,.04),rgba(5,7,10,.92));box-shadow:0 0 25px rgba(0,246,255,.08)">
+<h2 style="color:#00f6ff;margin:0 0 8px;font-size:clamp(24px,4vw,38px);text-shadow:0 0 12px rgba(0,246,255,.45)">MANIAC REAL EDITOR</h2>
+<p style="color:#9fb8bd;margin:0 0 18px">Non-destructive browser editing. Your original video stays untouched.</p><button id="mre-select-video" type="button" style="padding:13px 20px;border:1px solid #00f6ff;border-radius:10px;background:#00f6ff;color:#05070a;font-weight:900;cursor:pointer;margin-bottom:20px">🎬 SELECT VIDEO</button>
+
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px">
+<button id="mre-play" type="button">▶ PLAY</button>
+<button id="mre-back" type="button">↶ -5s</button>
+<button id="mre-forward" type="button">+5s ↷</button>
+<button id="mre-split" type="button">✂ SPLIT</button>
+<button id="mre-delete" type="button">🗑 DELETE SECTION</button>
+<button id="mre-undo" type="button">↩ UNDO</button>
+</div>
+
+<div style="padding:18px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(0,0,0,.18)">
+<label style="display:block;color:#9fb8bd;font-size:13px;margin-bottom:7px">PLAYHEAD</label>
+<input id="mre-playhead" type="range" min="0" max="100" value="0" step=".01" style="width:100%">
+<div style="display:flex;justify-content:space-between;color:#8ca3a8;font-size:12px">
+<span id="mre-current">0.0s</span>
+<span id="mre-total">0.0s</span>
+</div>
+</div>
+
+<div style="margin-top:18px">
+<label style="display:block;color:#9fb8bd;font-size:13px;margin-bottom:7px">SELECTED RANGE</label>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">
+<label style="color:#9fb8bd;font-size:12px">START<input id="mre-start" type="number" min="0" step=".1" value="0" style="width:100%;margin-top:5px;padding:10px;background:#080d10;color:#fff;border:1px solid rgba(0,246,255,.25);border-radius:8px"></label>
+<label style="color:#9fb8bd;font-size:12px">END<input id="mre-end" type="number" min="0" step=".1" value="0" style="width:100%;margin-top:5px;padding:10px;background:#080d10;color:#fff;border:1px solid rgba(0,246,255,.25);border-radius:8px"></label>
+</div>
+</div>
+
+<div style="margin-top:18px;padding:18px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(0,0,0,.18)">
+<h3 style="margin:0 0 14px;color:#00f6ff">ADJUSTMENTS</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px">
+<label style="color:#9fb8bd;font-size:12px">SPEED
+<select id="mre-speed" style="display:block;width:100%;margin-top:5px;padding:10px;background:#080d10;color:#fff;border:1px solid rgba(0,246,255,.25);border-radius:8px">
+<option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option>
+</select></label>
+
+<label style="color:#9fb8bd;font-size:12px">VOLUME
+<input id="mre-volume" type="range" min="0" max="1" step=".01" value="1" style="display:block;width:100%;margin-top:13px">
+</label>
+
+<label style="color:#9fb8bd;font-size:12px">BRIGHTNESS
+<input id="mre-brightness" type="range" min="50" max="150" value="100" style="display:block;width:100%;margin-top:13px">
+</label>
+
+<label style="color:#9fb8bd;font-size:12px">CONTRAST
+<input id="mre-contrast" type="range" min="50" max="150" value="100" style="display:block;width:100%;margin-top:13px">
+</label>
+
+<label style="color:#9fb8bd;font-size:12px">SATURATION
+<input id="mre-saturation" type="range" min="0" max="200" value="100" style="display:block;width:100%;margin-top:13px">
+</label>
+
+<label style="color:#9fb8bd;font-size:12px">FORMAT
+<select id="mre-format" style="display:block;width:100%;margin-top:5px;padding:10px;background:#080d10;color:#fff;border:1px solid rgba(0,246,255,.25);border-radius:8px">
+<option value="16/9">16:9 Landscape</option>
+<option value="9/16">9:16 Vertical</option>
+<option value="1/1">1:1 Square</option>
+</select></label>
+</div>
+</div>
+
+<div style="margin-top:18px;padding:18px;border:1px solid rgba(0,246,255,.15);border-radius:14px;background:rgba(0,0,0,.18)">
+<h3 style="margin:0 0 12px;color:#00f6ff">EDIT TIMELINE</h3>
+<div id="mre-timeline" style="display:flex;gap:3px;min-height:48px;align-items:stretch;background:#070b0e;border-radius:8px;padding:4px;overflow:hidden"></div>
+<div id="mre-info" style="margin-top:12px;color:#9fb8bd;font-size:13px">Load a video to begin editing.</div>
+</div>
+</section>
+
+<style id="maniac-real-editor-style">
+#mre-play,#mre-back,#mre-forward,#mre-split,#mre-delete,#mre-undo{
+padding:11px 15px;border:1px solid rgba(0,246,255,.4);border-radius:9px;background:rgba(0,246,255,.07);color:#00f6ff;font-weight:800;cursor:pointer
+}
+#mre-play:hover,#mre-back:hover,#mre-forward:hover,#mre-split:hover,#mre-delete:hover,#mre-undo:hover{background:#00f6ff;color:#05070a}
+#mre-timeline .mre-clip{flex:1;min-width:8px;border-radius:4px;background:linear-gradient(90deg,#00f6ff,#147b83);position:relative;cursor:pointer}
+#mre-timeline .mre-clip.deleted{background:#39151b;opacity:.65}
+#mre-timeline .mre-clip span{position:absolute;left:5px;top:50%;transform:translateY(-50%);font-size:10px;color:#fff;white-space:nowrap;overflow:hidden}
+</style>
+
+<script id="maniac-real-editor-script">
+(function(){
+const oldVideo=document.getElementById("maniac-editor-video");
+const play=document.getElementById("mre-play");
+const back=document.getElementById("mre-back");
+const forward=document.getElementById("mre-forward");
+const split=document.getElementById("mre-split");
+const del=document.getElementById("mre-delete");
+const undo=document.getElementById("mre-undo");
+const playhead=document.getElementById("mre-playhead");
+const current=document.getElementById("mre-current");
+const total=document.getElementById("mre-total");
+const start=document.getElementById("mre-start");
+const end=document.getElementById("mre-end");
+const speed=document.getElementById("mre-speed");
+const volume=document.getElementById("mre-volume");
+const brightness=document.getElementById("mre-brightness");
+const contrast=document.getElementById("mre-contrast");
+const saturation=document.getElementById("mre-saturation");
+const format=document.getElementById("mre-format");
+const timeline=document.getElementById("mre-timeline");
+const info=document.getElementById("mre-info");
+const selectVideo=document.getElementById("mre-select-video");
+
+if(!oldVideo||!timeline)return;
+
+if(selectVideo){selectVideo.addEventListener("click",function(){
+const input=document.getElementById("maniac-editor-input");
+if(input)input.click();
+});}
+
+let totalDuration=0;
+let clips=[];
+let history=[];
+
+function snapshot(){
+return JSON.parse(JSON.stringify(clips));
+}
+
+function restoreState(state){
+clips=JSON.parse(JSON.stringify(state));
+render();
+}
+
+function pushHistory(){
+history.push(snapshot());
+if(history.length>30)history.shift();
+}
+
+function formatTime(t){
+t=Number(t)||0;
+return t.toFixed(1)+"s";
+}
+
+function render(){
+timeline.innerHTML="";
+if(!totalDuration){
+info.textContent="Load a video to begin editing.";
+return;
+}
+
+clips.forEach(function(c,i){
+const el=document.createElement("div");
+el.className="mre-clip"+(c.deleted?" deleted":"");
+el.style.flexGrow=Math.max(.01,c.end-c.start);
+el.title=(c.deleted?"DELETED ":"KEEP ")+formatTime(c.start)+" → "+formatTime(c.end);
+const label=document.createElement("span");
+label.textContent=c.deleted?"DELETED":"KEEP";
+el.appendChild(label);
+el.addEventListener("click",function(){
+start.value=c.start.toFixed(1);
+end.value=c.end.toFixed(1);
+oldVideo.currentTime=c.start;
+updateSelection();
+});
+timeline.appendChild(el);
+});
+
+info.textContent=clips.length+" timeline segment"+(clips.length===1?"":"s")+" • "+clips.filter(c=>!c.deleted).length+" kept";
+}
+
+function updateSelection(){
+let s=Math.max(0,Math.min(Number(start.value)||0,totalDuration));
+let e=Math.max(s,Math.min(Number(end.value)||0,totalDuration));
+start.value=s.toFixed(1);
+end.value=e.toFixed(1);
+}
+
+function applyVisuals(){
+oldVideo.playbackRate=Number(speed.value)||1;
+oldVideo.volume=Number(volume.value)||1;
+oldVideo.style.filter="brightness("+(Number(brightness.value)/100)+") contrast("+(Number(contrast.value)/100)+") saturate("+(Number(saturation.value)/100)+")";
+
+const ratio=format.value;
+if(ratio==="9/16"){
+oldVideo.style.aspectRatio="9/16";
+oldVideo.style.objectFit="cover";
+}else if(ratio==="1/1"){
+oldVideo.style.aspectRatio="1/1";
+oldVideo.style.objectFit="cover";
+}else{
+oldVideo.style.aspectRatio="16/9";
+oldVideo.style.objectFit="contain";
+}
+}
+
+function splitAt(t){
+t=Number(t)||0;
+if(t<=0||t>=totalDuration)return;
+
+const target=clips.find(function(c){return !c.deleted&&t>c.start&&t<c.end;});
+if(!target)return;
+
+pushHistory();
+
+const index=clips.indexOf(target);
+const left={start:target.start,end:t,deleted:false};
+const right={start:t,end:target.end,deleted:false};
+clips.splice(index,1,left,right);
+render();
+info.textContent="Split created at "+formatTime(t);
+}
+
+function deleteSelection(){
+let s=Math.min(Number(start.value)||0,Number(end.value)||0);
+let e=Math.max(Number(start.value)||0,Number(end.value)||0);
+if(e<=s)return;
+
+pushHistory();
+
+clips.forEach(function(c){
+if(c.deleted)return;
+if(e<=c.start||s>=c.end)return;
+
+if(s<=c.start&&e>=c.end){
+c.deleted=true;
+return;
+}
+
+if(s>c.start&&e<c.end){
+const index=clips.indexOf(c);
+const left={start:c.start,end:s,deleted:false};
+const middle={start:s,end:e,deleted:true};
+const right={start:e,end:c.end,deleted:false};
+clips.splice(index,1,left,middle,right);
+return;
+}
+
+if(s<=c.start){
+c.start=e;
+return;
+}
+
+if(e>=c.end){
+c.end=s;
+}
+});
+
+render();
+info.textContent="Selected section marked for deletion.";
+}
+
+play.addEventListener("click",function(){
+if(oldVideo.paused)oldVideo.play();else oldVideo.pause();
+});
+
+back.addEventListener("click",function(){
+oldVideo.currentTime=Math.max(0,oldVideo.currentTime-5);
+});
+
+forward.addEventListener("click",function(){
+oldVideo.currentTime=Math.min(totalDuration,oldVideo.currentTime+5);
+});
+
+split.addEventListener("click",function(){
+splitAt(oldVideo.currentTime);
+});
+
+del.addEventListener("click",function(){
+deleteSelection();
+});
+
+undo.addEventListener("click",function(){
+if(!history.length)return;
+clips=history.pop();
+render();
+info.textContent="Last edit undone.";
+});
+
+playhead.addEventListener("input",function(){
+if(!totalDuration)return;
+oldVideo.currentTime=(Number(playhead.value)/100)*totalDuration;
+});
+
+oldVideo.addEventListener("timeupdate",function(){
+if(!totalDuration)return;
+playhead.value=(oldVideo.currentTime/totalDuration)*100;
+current.textContent=formatTime(oldVideo.currentTime);
+});
+
+oldVideo.addEventListener("loadedmetadata",function(){
+totalDuration=Number(oldVideo.duration)||0;
+total.textContent=formatTime(totalDuration);
+start.value="0";
+end.value=totalDuration.toFixed(1);
+clips=[{start:0,end:totalDuration,deleted:false}];
+history=[];
+render();
+});
+
+[start,end].forEach(function(input){
+input.addEventListener("input",updateSelection);
+});
+
+[speed,volume,brightness,contrast,saturation,format].forEach(function(input){
+input.addEventListener("input",applyVisuals);
+input.addEventListener("change",applyVisuals);
+});
+
+})();
+</script>
+<!-- /MANIAC_VIDEO_EDITOR_PHASE2 -->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
