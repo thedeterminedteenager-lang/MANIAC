@@ -769,12 +769,37 @@ setTimeout(function(){
 const w=document.getElementById("maniac-welcome");
 if(w)w.remove();
 },3400);
-</script></head>
+</script><style id="maniac-creator-button-style">
+nav a[href="creator.html"]{
+  color:#00f6ff !important;
+  border:1px solid #00f6ff;
+  padding:9px 15px !important;
+  border-radius:999px;
+  font-weight:900 !important;
+  letter-spacing:1px;
+  text-shadow:0 0 8px rgba(0,246,255,.8);
+  box-shadow:0 0 10px rgba(0,246,255,.25),inset 0 0 10px rgba(0,246,255,.08);
+  background:rgba(0,246,255,.06);
+  transition:.25s ease;
+}
+nav a[href="creator.html"]:hover{
+  color:#05070a !important;
+  background:#00f6ff;
+  box-shadow:0 0 12px #00f6ff,0 0 30px rgba(0,246,255,.65);
+  transform:translateY(-2px) scale(1.04);
+}
+@media(max-width:700px){
+  nav a[href="creator.html"]{
+    padding:7px 11px !important;
+    font-size:12px;
+  }
+}
+</style></head>
 
 <body>
 
 <div class="creator">
-CREATED BY BABATUNFULU
+CREATED BY MUHAMMAD
 </div>
 
 <nav>
@@ -794,7 +819,7 @@ MANIAC<span>®</span>
 <button class="theme-btn" id="themeBtn"></button>
 
 </div>
-</nav>
+<a href="creator.html" style="color:inherit;text-decoration:none;font-weight:800;letter-spacing:1px;">CREATOR</a><a id="MANIAC-GAME-CENTER-LINK" href="games.html" title="Game Center" style="display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border:1px solid #00f6ff;border-radius:10px;color:#00f6ff;text-decoration:none;font-weight:900;letter-spacing:.5px;transition:.2s">🎮 GAME CENTER</a></nav>
 
 
 <!-- HERO -->
@@ -1874,7 +1899,7 @@ MANIAC®
 </div>
 
 <div class="footer-text">
-CREATED BY BABATUNFULU · TECHNOLOGY WITHOUT LIMITS.
+CREATED BY MUHAMMAD · TECHNOLOGY WITHOUT LIMITS.
 </div>
 
 </div>
@@ -2080,17 +2105,17 @@ updateThemeIcon();
 </style><section id="about-babatunfulu" style="padding:90px 20px;max-width:1100px;margin:0 auto;">
   <div style="text-align:center;margin-bottom:45px;">
     <p style="letter-spacing:3px;font-weight:700;opacity:.7;">THE MIND BEHIND MANIAC</p>
-    <h2 style="font-size:clamp(2.2rem,5vw,4rem);margin:10px 0;">ABOUT BABATUNFULU</h2>
+    <h2 style="font-size:clamp(2.2rem,5vw,4rem);margin:10px 0;">ABOUT MUHAMMAD</h2>
   </div>
   <div style="max-width:850px;margin:auto;padding:40px;border-radius:24px;background:rgba(127,127,127,.08);border:1px solid rgba(127,127,127,.2);line-height:1.8;">
-    <p><strong>BABATUNFULU</strong> is a young technology enthusiast, creator, and aspiring entrepreneur with a passion for understanding how technology works and imagining what it could become.</p>
-    <p>From smartphones and computers to gaming, artificial intelligence, cybersecurity, web development, and digital creativity, BABATUNFULU is constantly exploring new ideas and experimenting with technology. His interest goes beyond simply using technology — he wants to understand it, explain it, improve it, and eventually build it.</p>
+    <p><strong>MUHAMMAD</strong> is a young technology enthusiast, creator, and aspiring entrepreneur with a passion for understanding how technology works and imagining what it could become.</p>
+    <p>From smartphones and computers to gaming, artificial intelligence, cybersecurity, web development, and digital creativity, MUHAMMAD is constantly exploring new ideas and experimenting with technology. His interest goes beyond simply using technology — he wants to understand it, explain it, improve it, and eventually build it.</p>
     <p>That vision led to <strong>MANIAC</strong>, a technology brand concept created to bring together innovative products and ideas across smartphones, laptops, tablets, gaming, AI, displays, networking, and more.</p>
-    <p>Alongside his technology ambitions, BABATUNFULU is also interested in <strong>content creation and video editing</strong>, creating technology-focused content and sharing interesting ideas with others. He believes that great technology should not only be powerful, but also exciting, accessible, and designed with the future in mind.</p>
+    <p>Alongside his technology ambitions, MUHAMMAD is also interested in <strong>content creation and video editing</strong>, creating technology-focused content and sharing interesting ideas with others. He believes that great technology should not only be powerful, but also exciting, accessible, and designed with the future in mind.</p>
     <p>His long-term ambition is to grow MANIAC into a major global technology company — building products, developing new ideas, and creating an ecosystem that can stand alongside the world's biggest technology brands.</p>
     <div style="text-align:center;margin-top:40px;">
       <p style="font-size:1.2rem;font-weight:700;">MANIAC is more than a website.<br>It's the beginning of a vision.</p>
-      <p style="margin-top:25px;font-weight:700;letter-spacing:1px;">BABATUNFULU<br><span style="font-weight:400;opacity:.7;">Founder • Creator • Technology Enthusiast</span></p>
+      <p style="margin-top:25px;font-weight:700;letter-spacing:1px;">MUHAMMAD<br><span style="font-weight:400;opacity:.7;">Founder • Creator • Technology Enthusiast</span></p>
     </div>
   </div>
 </section><section id="maniac-game" style="padding:70px 20px;max-width:1200px;margin:0 auto;">
@@ -2969,15 +2994,15 @@ resize();
       if(/\b(hi|hello|hey|yo|sup|wassup)\b/.test(q))
         reply="Hey! 👋 I'm MANIAC AI. Welcome to the MANIAC universe!";
       else if(q.includes('what is maniac')||q.includes('about maniac'))
-        reply="MANIAC is a technology brand concept created by BABATUNFULU, focused on innovative devices, software, AI, gaming, networking, displays, and more.";
+        reply="MANIAC is a technology brand concept created by MUHAMMAD, focused on innovative devices, software, AI, gaming, networking, displays, and more.";
       else if(q.includes('babatunfulu')||q.includes('who created maniac')||q.includes('who is the founder'))
-        reply="BABATUNFULU is the founder and creator of MANIAC — a young technology enthusiast, creator, and aspiring entrepreneur with a passion for technology and innovation.";
+        reply="MUHAMMAD is the founder and creator of MANIAC — a young technology enthusiast, creator, and aspiring entrepreneur with a passion for technology and innovation.";
       else if(q.includes('maniac one se')||q.includes('one se'))
         reply="MANIAC ONE SE is the featured smartphone concept on this website. It's designed as part of the MANIAC ecosystem.";
       else if(q.includes('product')||q.includes('products')||q.includes('devices'))
         reply="MANIAC's vision includes smartphones, laptops, tablets, watches, earbuds, gaming devices, cameras, VR, displays, speakers, keyboards, printers, networking, power products, AI, and more.";
       else if(q.includes('website')||q.includes('site'))
-        reply="You're currently exploring the MANIAC website — a technology showcase created by BABATUNFULU.";
+        reply="You're currently exploring the MANIAC website — a technology showcase created by MUHAMMAD.";
       else if(q.includes('who are you')||q.includes('what can you do')||q.includes('your name'))
         reply="I'm MANIAC AI 🤖, the AI assistant built into the MANIAC website.";
       else if(q.includes('elon')||q.includes('elon musk'))
@@ -4406,6 +4431,12 @@ body.light-mode .mr-helpful{border-color:rgba(0,0,0,.15)}
 })();
 </script></body>
 </html>
+
+
+
+
+
+
 
 
 
