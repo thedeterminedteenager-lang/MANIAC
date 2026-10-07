@@ -151,11 +151,6 @@ a{text-decoration:none;color:inherit}
  color:#ff5968;
  border-color:#51232b
 }
-.activePause{
- background:#00f6ff!important;
- border-color:#00f6ff!important;
- color:#020405!important
-}
 .difficulty{
  display:flex;
  gap:5px
@@ -179,6 +174,7 @@ a{text-decoration:none;color:inherit}
 }
 #canvas{
  display:block;
+ touch-action:none;
  background:#03070a;
  border:1px solid #1e3440;
  border-radius:12px;
@@ -407,12 +403,6 @@ a{text-decoration:none;color:inherit}
    <p>Switch lanes, dodge obstacles and survive for as long as possible.</p>
   </div>
 
-  <div class="card" data-game="stickman">
-   <span class="num">08 // FIGHTER</span><span class="tag">AI DUEL</span>
-   <h2>🥊 STICKMAN DUEL</h2>
-   <p>Fight an AI stickman using movement, jumps, punches and kicks.</p>
-  </div>
-
  </div>
 </section>
 
@@ -429,7 +419,6 @@ a{text-decoration:none;color:inherit}
    <button data-difficulty="hard">HARD</button>
   </div>
 
-  <button class="action" id="pauseBtn">Ⅱ PAUSE</button>
   <button class="action" id="full">⛶ FULLSCREEN</button>
  </div>
 
@@ -451,15 +440,6 @@ const canvas=$("#canvas");
 const ctx=canvas.getContext("2d");
 
 let currentGame="";
-const gameDifficulty={
-  space:"normal",
-  snake:"normal",
-  brick:"normal",
-  reaction:"normal",
-  ttt:"normal",
-  chess:"normal",
-  danger:"normal"
-};
 let difficulty="normal";
 let timer=null;
 let raf=null;
@@ -473,8 +453,6 @@ const LEVELS={
 };
 
 function cleanup(){
- paused=false;
- if(state.autoFire) clearInterval(state.autoFire);
  clearInterval(timer);
  cancelAnimationFrame(raf);
  timer=null;
@@ -483,6 +461,10 @@ function cleanup(){
  window.onkeydown=null;
  window.onkeyup=null;
  canvas.onclick=null;
+ canvas.onpointerdown=null;
+ canvas.onpointermove=null;
+ canvas.onpointerup=null;
+ canvas.onpointercancel=null;
  $("#special").innerHTML="";
  $("#controls").innerHTML="";
  $("#message").innerHTML="";
@@ -503,8 +485,6 @@ function openGame(g){
  cleanup();
 
  currentGame=g;
- difficulty=gameDifficulty[g]||"normal";
- paused=false;
  home.style.display="none";
  screen.classList.add("active");
 
@@ -515,8 +495,7 @@ function openGame(g){
   reaction:"REACTION RUSH",
   ttt:"TIC-TAC-TOE",
   chess:"MANIAC CHESS",
-  danger:"DANGER DASH",
-  stickman:"STICKMAN DUEL"
+  danger:"DANGER DASH"
  };
 
  $("#gameTitle").textContent=titles[g];
@@ -532,10 +511,8 @@ function openGame(g){
   reaction:startReaction,
   ttt:startTTT,
   chess:startChess,
-  danger:startDanger,
-  stickman:startStickman
+  danger:startDanger
  })[g]();
- updatePauseButton();
 }
 
 document.querySelectorAll(".card").forEach(card=>{
@@ -544,9 +521,7 @@ document.querySelectorAll(".card").forEach(card=>{
 
 document.querySelectorAll("[data-difficulty]").forEach(button=>{
  button.onclick=()=>{
-  if(!currentGame)return;
-  gameDifficulty[currentGame]=button.dataset.difficulty;
-  difficulty=gameDifficulty[currentGame];
+  difficulty=button.dataset.difficulty;
   openGame(currentGame);
  };
 });
@@ -571,459 +546,423 @@ $("#full").onclick=async()=>{
 
 function startSpace(){
 
-  const L=LEVELS[difficulty];
+ const L=LEVELS[difficulty];
 
-  state={
-    x:450,
-    y:530,
-    bullets:[],
-    enemies:[],
-    score:0,
-    lives:3,
-    over:false,
-    invulnerableUntil:0
-  };
+ state={
+  x:450,
+  y:530,
+  bullets:[],
+  enemies:[],
+  score:0,
+  lives:3,
+  over:false
+ };
 
-  canvas.width=900;
-  canvas.height=600;
+ canvas.width=900;
+ canvas.height=600;
 
-  message("AIRSPACE OVERRIDE","A/D or ←/→ to move • AUTO-FIRE ENABLED");
+ message("AIRSPACE OVERRIDE","A/D or ←/→ to move • SPACE to fire");
 
-  const keydown=e=>{
-    keys[e.key.toLowerCase()]=true;
+ const keydown=e=>{
+  keys[e.key.toLowerCase()]=true;
 
-    if(e.code==="Space"){
-      e.preventDefault();
-    }
+  if(e.code==="Space"){
+   e.preventDefault();
 
-    if(e.key.toLowerCase()==="r"&&state.over){
-      startSpace();
-    }
-  };
-
-  const keyup=e=>{
-    keys[e.key.toLowerCase()]=false;
-  };
-
-  window.onkeydown=keydown;
-  window.onkeyup=keyup;
-
-  // Enemies spawn at a difficulty-specific rate.
-  timer=setInterval(()=>{
-    if(!state.over){
-      state.enemies.push({
-        x:35+Math.random()*830,
-        y:-35,
-        r:15+Math.random()*10,
-        speed:(1.8+Math.random()*1.4)*L.enemy
-      });
-    }
-  },difficulty==="easy"?1450:difficulty==="hard"?700:1050);
-
-  // Dedicated automatic-fire loop. The player no longer needs SPACE.
-  const fireDelay=difficulty==="easy"?220:difficulty==="hard"?105:155;
-  const autoFire=setInterval(()=>{
-    if(!state.over&&!paused){
-      state.bullets.push({
-        x:state.x,
-        y:state.y-28,
-        speed:13
-      });
-    }
-  },fireDelay);
-
-  state.autoFire=autoFire;
-
-  function loop(){
-
-    if(state.over)return;
-    if(paused){ raf=requestAnimationFrame(loop); return; }
-
-    const now=performance.now();
-
-    state.x+=
-      (keys.a||keys.arrowleft?-8:0)+
-      (keys.d||keys.arrowright?8:0);
-
-    state.x=Math.max(25,Math.min(875,state.x));
-
-    ctx.fillStyle="#03070a";
-    ctx.fillRect(0,0,900,600);
-
-    // Player
-    const playerHitReady=now>=state.invulnerableUntil;
-
-    ctx.fillStyle=playerHitReady?"#00f6ff":"#ffffff";
-    ctx.beginPath();
-    ctx.moveTo(state.x,state.y-25);
-    ctx.lineTo(state.x-23,state.y+22);
-    ctx.lineTo(state.x+23,state.y+22);
-    ctx.closePath();
-    ctx.fill();
-
-    // Move bullets.
-    state.bullets.forEach(b=>b.y-=b.speed);
-    state.bullets=state.bullets.filter(b=>b.y>-30);
-
-    // Move enemies.
-    state.enemies.forEach(e=>e.y+=e.speed);
-
-    // Bullet/enemy collisions.
-    for(let i=state.bullets.length-1;i>=0;i--){
-      let destroyed=false;
-
-      for(let j=state.enemies.length-1;j>=0;j--){
-        const b=state.bullets[i];
-        const e=state.enemies[j];
-
-        if(Math.hypot(b.x-e.x,b.y-e.y)<e.r+7){
-          state.bullets.splice(i,1);
-          state.enemies.splice(j,1);
-          state.score+=10;
-          destroyed=true;
-          break;
-        }
-      }
-
-      if(destroyed)continue;
-    }
-
-    // Only an actual enemy/player collision costs a life.
-    // Enemies that pass the bottom are simply removed.
-    if(playerHitReady){
-      for(let j=state.enemies.length-1;j>=0;j--){
-        const e=state.enemies[j];
-
-        if(Math.hypot(state.x-e.x,state.y-e.y)<e.r+27){
-          state.enemies.splice(j,1);
-          state.lives--;
-          state.invulnerableUntil=now+1000;
-
-          if(state.lives<=0){
-            state.over=true;
-            clearInterval(state.autoFire);
-            message("GAME OVER","You were hit • Score: "+state.score+" • Press R to restart");
-          }
-          break;
-        }
-      }
-    }
-
-    state.enemies=state.enemies.filter(e=>e.y<640);
-
-    // Draw enemies.
-    ctx.fillStyle="#ff4e62";
-    state.enemies.forEach(e=>{
-      ctx.beginPath();
-      ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
-      ctx.fill();
+   if(!state.over){
+    state.bullets.push({
+     x:state.x,
+     y:state.y-20
     });
-
-    // Draw bullets.
-    ctx.fillStyle="#ffe85c";
-    state.bullets.forEach(b=>{
-      ctx.fillRect(b.x-3,b.y-12,6,16);
-    });
-
-    hud(
-      "SCORE "+state.score,
-      "LIVES "+state.lives,
-      "AUTO-FIRE",
-      difficulty.toUpperCase()
-    );
-
-    if(!state.over){
-      raf=requestAnimationFrame(loop);
-    }
+   }
   }
 
-  loop();
+  if(e.key.toLowerCase()==="r"&&state.over){
+   startSpace();
+  }
+ };
+
+ const keyup=e=>{
+  keys[e.key.toLowerCase()]=false;
+ };
+
+ window.onkeydown=keydown;
+ window.onkeyup=keyup;
+
+ // Touch/mouse drag: move the ship directly under the player's finger.
+ // Keyboard movement and SPACE firing remain available on desktop.
+ let shipPointerDown=false;
+ const moveShipToPointer=e=>{
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=canvas.width/rect.width;
+  state.x=Math.max(25,Math.min(875,(e.clientX-rect.left)*scaleX));
+ };
+ canvas.onpointerdown=e=>{
+  if(e.pointerType==="touch"||e.pointerType==="pen"||e.pointerType==="mouse"){
+   shipPointerDown=true;
+   try{canvas.setPointerCapture(e.pointerId)}catch(_){}
+   moveShipToPointer(e);
+   e.preventDefault();
+  }
+ };
+ canvas.onpointermove=e=>{
+  if(shipPointerDown){moveShipToPointer(e);e.preventDefault();}
+ };
+ canvas.onpointerup=e=>{shipPointerDown=false;};
+ canvas.onpointercancel=e=>{shipPointerDown=false;};
+
+ timer=setInterval(()=>{
+  if(!state.over){
+   state.enemies.push({
+    x:25+Math.random()*850,
+    y:-30,
+    r:15+Math.random()*12,
+    speed:(2+Math.random()*2)*L.enemy
+   });
+  }
+ },difficulty==="easy"?1300:difficulty==="hard"?550:900);
+
+ function loop(){
+
+  if(state.over)return;
+
+  state.x+=
+   (keys.a||keys.arrowleft?-8:0)+
+   (keys.d||keys.arrowright?8:0);
+
+  state.x=Math.max(25,Math.min(875,state.x));
+
+  ctx.fillStyle="#03070a";
+  ctx.fillRect(0,0,900,600);
+
+  ctx.fillStyle="#00f6ff";
+  ctx.beginPath();
+  ctx.moveTo(state.x,state.y-25);
+  ctx.lineTo(state.x-23,state.y+22);
+  ctx.lineTo(state.x+23,state.y+22);
+  ctx.closePath();
+  ctx.fill();
+
+  state.bullets.forEach(b=>b.y-=12);
+
+  state.enemies.forEach(e=>e.y+=e.speed);
+
+  for(let i=state.bullets.length-1;i>=0;i--){
+   for(let j=state.enemies.length-1;j>=0;j--){
+    const b=state.bullets[i];
+    const e=state.enemies[j];
+
+    if(Math.hypot(b.x-e.x,b.y-e.y)<e.r+7){
+     state.bullets.splice(i,1);
+     state.enemies.splice(j,1);
+     state.score+=10;
+     break;
+    }
+   }
+  }
+
+  for(const e of state.enemies){
+   if(e.y>610){
+    e.y=999;
+    state.lives--;
+   }
+  }
+
+  ctx.fillStyle="#ff4e62";
+  state.enemies.forEach(e=>{
+   ctx.beginPath();
+   ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+   ctx.fill();
+  });
+
+  ctx.fillStyle="#ffe85c";
+  state.bullets.forEach(b=>{
+   ctx.fillRect(b.x-3,b.y-12,6,16);
+  });
+
+  if(state.lives<=0){
+   state.over=true;
+   message("GAME OVER","Score: "+state.score+" • Press R to restart");
+  }
+
+  hud(
+   "SCORE "+state.score,
+   "LIVES "+state.lives,
+   difficulty.toUpperCase()
+  );
+
+  raf=requestAnimationFrame(loop);
+ }
+
+ loop();
 }
 
 /* ================= SNAKE ================= */
 
 function startSnake(){
 
-  // Higher milliseconds = slower snake.
-  const speed={easy:230,normal:155,hard:100}[difficulty];
+ const speed={easy:155,normal:105,hard:70}[difficulty];
 
-  state={
-    snake:[{x:12,y:12}],
-    dir:{x:1,y:0},
-    next:{x:1,y:0},
-    food:{x:5,y:5},
-    score:0,
-    over:false
-  };
+ state={
+  snake:[{x:12,y:12}],
+  dir:{x:1,y:0},
+  next:{x:1,y:0},
+  food:{x:5,y:5},
+  score:0,
+  over:false
+ };
 
-  canvas.width=576;
-  canvas.height=576;
+ canvas.width=576;
+ canvas.height=576;
 
-  window.onkeydown=e=>{
-    const k=e.key.toLowerCase();
+ const setSnakeDirection=(x,y)=>{
+  // Ignore direct reversals so swipes cannot instantly turn into the body.
+  if(x!==-state.dir.x||y!==-state.dir.y)state.next={x,y};
+ };
 
-    if(k==="arrowup"||k==="w"){
-      if(state.dir.y!==1)state.next={x:0,y:-1};
-    }
-    if(k==="arrowdown"||k==="s"){
-      if(state.dir.y!==-1)state.next={x:0,y:1};
-    }
-    if(k==="arrowleft"||k==="a"){
-      if(state.dir.x!==1)state.next={x:-1,y:0};
-    }
-    if(k==="arrowright"||k==="d"){
-      if(state.dir.x!==-1)state.next={x:1,y:0};
-    }
+ window.onkeydown=e=>{
+  const k=e.key.toLowerCase();
 
-    if(k==="r"&&state.over)startSnake();
-  };
+  if(k==="arrowup"||k==="w")setSnakeDirection(0,-1);
+  if(k==="arrowdown"||k==="s")setSnakeDirection(0,1);
+  if(k==="arrowleft"||k==="a")setSnakeDirection(-1,0);
+  if(k==="arrowright"||k==="d")setSnakeDirection(1,0);
 
-  function tick(){
+  if(k==="r"&&state.over)startSnake();
+ };
 
-    if(state.over||paused)return;
+ // Swipe anywhere on the board to steer; keyboard controls remain unchanged.
+ let swipeStart=null;
+ canvas.onpointerdown=e=>{
+  swipeStart={x:e.clientX,y:e.clientY};
+  try{canvas.setPointerCapture(e.pointerId)}catch(_){}
+  e.preventDefault();
+ };
+ canvas.onpointerup=e=>{
+  if(!swipeStart)return;
+  const dx=e.clientX-swipeStart.x,dy=e.clientY-swipeStart.y;
+  swipeStart=null;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<18)return;
+  if(Math.abs(dx)>Math.abs(dy))setSnakeDirection(dx>0?1:-1,0);
+  else setSnakeDirection(0,dy>0?1:-1);
+  e.preventDefault();
+ };
+ canvas.onpointercancel=()=>{swipeStart=null;};
 
-    if(
-      state.next.x!==-state.dir.x||
-      state.next.y!==-state.dir.y
-    ){
-      state.dir=state.next;
-    }
+ function tick(){
 
-    const head={
-      x:state.snake[0].x+state.dir.x,
-      y:state.snake[0].y+state.dir.y
-    };
+  if(state.over)return;
 
-    if(
-      head.x<0||
-      head.y<0||
-      head.x>=24||
-      head.y>=24||
-      state.snake.some(s=>s.x===head.x&&s.y===head.y)
-    ){
-      state.over=true;
-      message("GAME OVER","Score: "+state.score+" • Press R");
-      return;
-    }
-
-    state.snake.unshift(head);
-
-    if(
-      head.x===state.food.x&&
-      head.y===state.food.y
-    ){
-
-      state.score+=10;
-
-      do{
-        state.food={
-          x:Math.floor(Math.random()*24),
-          y:Math.floor(Math.random()*24)
-        };
-      }while(
-        state.snake.some(
-          s=>s.x===state.food.x&&s.y===state.food.y
-        )
-      );
-
-    }else{
-      state.snake.pop();
-    }
-
-    ctx.fillStyle="#061015";
-    ctx.fillRect(0,0,576,576);
-
-    ctx.fillStyle="#ff4d62";
-    ctx.fillRect(
-      state.food.x*24,
-      state.food.y*24,
-      22,
-      22
-    );
-
-    ctx.fillStyle="#00f6ff";
-
-    state.snake.forEach(s=>{
-      ctx.fillRect(
-        s.x*24,
-        s.y*24,
-        22,
-        22
-      );
-    });
-
-    hud(
-      "SCORE "+state.score,
-      "SPEED "+difficulty.toUpperCase()
-    );
+  if(
+   state.next.x!==-state.dir.x||
+   state.next.y!==-state.dir.y
+  ){
+   state.dir=state.next;
   }
 
-  timer=setInterval(tick,speed);
-  tick();
+  const head={
+   x:state.snake[0].x+state.dir.x,
+   y:state.snake[0].y+state.dir.y
+  };
+
+  if(
+   head.x<0||
+   head.y<0||
+   head.x>=24||
+   head.y>=24||
+   state.snake.some(s=>s.x===head.x&&s.y===head.y)
+  ){
+   state.over=true;
+   message("GAME OVER","Score: "+state.score+" • Press R");
+   return;
+  }
+
+  state.snake.unshift(head);
+
+  if(
+   head.x===state.food.x&&
+   head.y===state.food.y
+  ){
+
+   state.score+=10;
+
+   do{
+    state.food={
+     x:Math.floor(Math.random()*24),
+     y:Math.floor(Math.random()*24)
+    };
+   }while(
+    state.snake.some(
+     s=>s.x===state.food.x&&s.y===state.food.y
+    )
+   );
+
+  }else{
+   state.snake.pop();
+  }
+
+  ctx.fillStyle="#061015";
+  ctx.fillRect(0,0,576,576);
+
+  ctx.fillStyle="#ff4d62";
+  ctx.fillRect(
+   state.food.x*24,
+   state.food.y*24,
+   22,
+   22
+  );
+
+  ctx.fillStyle="#00f6ff";
+
+  state.snake.forEach(s=>{
+   ctx.fillRect(
+    s.x*24,
+    s.y*24,
+    22,
+    22
+   );
+  });
+
+  hud("SCORE "+state.score,"SPEED "+difficulty.toUpperCase());
+ }
+
+ timer=setInterval(tick,speed);
+ tick();
 }
 
 /* ================= BRICK BREAKER ================= */
 
 function startBrick(){
 
-  const L=LEVELS[difficulty];
+ const L=LEVELS[difficulty];
 
-  state={
-    paddle:450,
-    ball:{
-      x:450,
-      y:500,
-      vx:4*L.speed,
-      vy:-5*L.speed
-    },
-    score:0,
-    lives:3,
-    over:false
-  };
+ state={
+  paddle:450,
+  ball:{
+   x:450,
+   y:500,
+   vx:4*L.speed,
+   vy:-5*L.speed
+  },
+  score:0,
+  lives:3,
+  over:false
+ };
 
-  canvas.width=900;
-  canvas.height=600;
+ canvas.width=900;
+ canvas.height=600;
 
-  let bricks=[];
+ let bricks=[];
 
-  for(let y=0;y<5;y++){
-    for(let x=0;x<10;x++){
-      bricks.push({
-        x:55+x*82,
-        y:65+y*34,
-        w:70,
-        h:24,
-        alive:true
-      });
-    }
+ for(let y=0;y<5;y++){
+  for(let x=0;x<10;x++){
+   bricks.push({
+    x:55+x*82,
+    y:65+y*34,
+    w:70,
+    h:24,
+    alive:true
+   });
+  }
+ }
+
+ window.onkeydown=e=>{
+  keys[e.key.toLowerCase()]=true;
+
+  if(e.key.toLowerCase()==="r"&&state.over){
+   startBrick();
+  }
+ };
+
+ window.onkeyup=e=>{
+  keys[e.key.toLowerCase()]=false;
+ };
+
+ function loop(){
+
+  if(state.over)return;
+
+  state.paddle+=
+   (keys.a||keys.arrowleft?-10:0)+
+   (keys.d||keys.arrowright?10:0);
+
+  state.paddle=Math.max(70,Math.min(830,state.paddle));
+
+  const b=state.ball;
+
+  b.x+=b.vx;
+  b.y+=b.vy;
+
+  if(b.x<10||b.x>890)b.vx*=-1;
+  if(b.y<10)b.vy*=-1;
+
+  if(
+   b.y>540&&
+   b.x>state.paddle-75&&
+   b.x<state.paddle+75
+  ){
+   b.vy=-Math.abs(b.vy);
   }
 
-  state.bricks=bricks;
+  for(const r of bricks){
 
-  window.onkeydown=e=>{
-    keys[e.key.toLowerCase()]=true;
-
-    if(e.key.toLowerCase()==="r"&&state.over){
-      startBrick();
-    }
-  };
-
-  window.onkeyup=e=>{
-    keys[e.key.toLowerCase()]=false;
-  };
-
-  function loop(){
-
-    if(state.over)return;
-    if(paused){ raf=requestAnimationFrame(loop); return; }
-
-    state.paddle+=
-      (keys.a||keys.arrowleft?-10:0)+
-      (keys.d||keys.arrowright?10:0);
-
-    state.paddle=Math.max(70,Math.min(830,state.paddle));
-
-    const b=state.ball;
-
-    b.x+=b.vx;
-    b.y+=b.vy;
-
-    if(b.x<10||b.x>890){
-      b.x=Math.max(10,Math.min(890,b.x));
-      b.vx*=-1;
-    }
-
-    if(b.y<10){
-      b.y=10;
-      b.vy*=-1;
-    }
-
-    if(
-      b.vy>0&&
-      b.y>535&&
-      b.y<575&&
-      b.x>state.paddle-82&&
-      b.x<state.paddle+82
-    ){
-      b.y=535;
-      b.vy=-Math.abs(b.vy);
-
-      // Slightly change horizontal direction based on where
-      // the ball lands on the paddle.
-      const offset=(b.x-state.paddle)/82;
-      b.vx=offset*5*L.speed;
-      if(Math.abs(b.vx)<1.2)b.vx=(b.vx<0?-1.2:1.2)*L.speed;
-    }
-
-    for(const r of bricks){
-
-      if(
-        r.alive&&
-        b.x>r.x&&
-        b.x<r.x+r.w&&
-        b.y>r.y&&
-        b.y<r.y+r.h
-      ){
-        r.alive=false;
-        b.vy*=-1;
-        state.score+=10;
-        break;
-      }
-    }
-
-    // FIX: clearing the entire wall ends the game with a win.
-    if(bricks.every(r=>!r.alive)){
-      state.over=true;
-      message("YOU WIN!","All blocks destroyed • Score: "+state.score);
-      return;
-    }
-
-    if(b.y>620){
-
-      state.lives--;
-
-      b.x=450;
-      b.y=500;
-      b.vx=4*L.speed;
-      b.vy=-5*L.speed;
-
-      if(state.lives<=0){
-        state.over=true;
-        message("GAME OVER","Score: "+state.score+" • Press R");
-        return;
-      }
-    }
-
-    ctx.fillStyle="#03070a";
-    ctx.fillRect(0,0,900,600);
-
-    ctx.fillStyle="#00f6ff";
-
-    bricks.forEach(r=>{
-      if(r.alive){
-        ctx.fillRect(r.x,r.y,r.w,r.h);
-      }
-    });
-
-    ctx.fillStyle="#fff";
-    ctx.beginPath();
-    ctx.arc(b.x,b.y,8,0,Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle="#ff4d62";
-    ctx.fillRect(state.paddle-75,560,150,15);
-
-    hud(
-      "SCORE "+state.score,
-      "BLOCKS LEFT "+bricks.filter(r=>r.alive).length,
-      "LIVES "+state.lives,
-      difficulty.toUpperCase()
-    );
-
-    raf=requestAnimationFrame(loop);
+   if(
+    r.alive&&
+    b.x>r.x&&
+    b.x<r.x+r.w&&
+    b.y>r.y&&
+    b.y<r.y+r.h
+   ){
+    r.alive=false;
+    b.vy*=-1;
+    state.score+=10;
+   }
   }
 
-  loop();
+  if(b.y>620){
+
+   state.lives--;
+
+   b.x=450;
+   b.y=500;
+   b.vx=4*L.speed;
+   b.vy=-5*L.speed;
+
+   if(state.lives<=0){
+    state.over=true;
+    message("GAME OVER","Score: "+state.score+" • Press R");
+   }
+  }
+
+  ctx.fillStyle="#03070a";
+  ctx.fillRect(0,0,900,600);
+
+  ctx.fillStyle="#00f6ff";
+
+  bricks.forEach(r=>{
+   if(r.alive){
+    ctx.fillRect(r.x,r.y,r.w,r.h);
+   }
+  });
+
+  ctx.fillStyle="#fff";
+  ctx.beginPath();
+  ctx.arc(b.x,b.y,8,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle="#ff4d62";
+  ctx.fillRect(state.paddle-75,560,150,15);
+
+  hud(
+   "SCORE "+state.score,
+   "LIVES "+state.lives,
+   difficulty.toUpperCase()
+  );
+
+  raf=requestAnimationFrame(loop);
+ }
+
+ loop();
 }
 
 /* ================= REACTION ================= */
@@ -1057,7 +996,6 @@ function startReaction(){
 
   setTimeout(()=>{
 
-   if(paused){ setTimeout(()=>{ if(!paused){ state.ready=true; state.start=performance.now(); canvas.style.background="#063d25"; } },250); return; }
    state.ready=true;
    state.start=performance.now();
    canvas.style.background="#063d25";
@@ -1180,7 +1118,7 @@ function startTTT(){
 
  function aiMove(){
 
-  if(state.over||paused){ if(paused)setTimeout(aiMove,150); return; }
+  if(state.over)return;
 
   const empty=state.board
    .map((v,i)=>v?null:i)
@@ -1462,7 +1400,6 @@ async function startChess(){
     state.thinking=true;
 
     setTimeout(()=>{
-     if(paused){ setTimeout(()=>{ if(!paused) aiMove(); },250); return; }
      aiMove();
     },difficulty==="easy"?250:difficulty==="normal"?450:700);
    }
@@ -1715,380 +1652,169 @@ async function startChess(){
 
 function startDanger(){
 
-  // Danger Dash uses a deliberately readable pace.
-  const config={
-    easy:{speed:2.2,spawn:1450,gap:220},
-    normal:{speed:3.1,spawn:1150,gap:200},
-    hard:{speed:4.2,spawn:900,gap:180}
-  }[difficulty];
-
-  state={
-    lane:1,
-    obstacles:[],
-    score:0,
-    over:false,
-    laneCooldown:0,
-    lastSpawnLane:1
-  };
-
-  canvas.width=720;
-  canvas.height=520;
-
-  // Three wide lanes with a clearly visible player position.
-  const laneX=[120,360,600];
-  const playerY=420;
-  const playerW=70;
-  const playerH=70;
-  const obstacleW=78;
-  const obstacleH=58;
-
-  function moveLane(direction){
-    if(state.over)return;
-
-    const now=performance.now();
-    if(now<state.laneCooldown)return;
-
-    const old=state.lane;
-    state.lane=Math.max(0,Math.min(2,state.lane+direction));
-
-    if(state.lane!==old){
-      state.laneCooldown=now+130;
-    }
-  }
-
-  window.onkeydown=e=>{
-    const k=e.key.toLowerCase();
-
-    if(k==="arrowleft"||k==="a"){
-      e.preventDefault();
-      moveLane(-1);
-    }
-
-    if(k==="arrowright"||k==="d"){
-      e.preventDefault();
-      moveLane(1);
-    }
-
-    if(k==="r"&&state.over){
-      startDanger();
-    }
-  };
-
-  $("#controls").innerHTML=`
-    <button id="dangerLeft" aria-label="Move left">←</button>
-    <button id="dangerRight" aria-label="Move right">→</button>
-  `;
-
-  $("#dangerLeft").onclick=()=>moveLane(-1);
-  $("#dangerRight").onclick=()=>moveLane(1);
-
-  function canSpawnInLane(lane){
-    // Never place a new obstacle too close behind another obstacle
-    // in the same lane. This prevents unavoidable back-to-back hits.
-    return !state.obstacles.some(
-      o=>o.lane===lane && o.y<config.gap
-    );
-  }
-
-  function chooseSpawnLane(){
-
-    const available=[0,1,2].filter(canSpawnInLane);
-
-    if(!available.length)return null;
-
-    // Prefer lanes that don't create an impossible wall.
-    // Never block all three lanes at once.
-    let choices=available.filter(lane=>{
-      const occupiedNearTop=state.obstacles.some(
-        o=>o.y<140 && o.lane===lane
-      );
-      return !occupiedNearTop;
-    });
-
-    if(!choices.length)choices=available;
-
-    // Avoid repeatedly targeting the same lane.
-    if(choices.length>1){
-      const alternate=choices.filter(
-        lane=>lane!==state.lastSpawnLane
-      );
-      if(alternate.length)choices=alternate;
-    }
-
-    return choices[Math.floor(Math.random()*choices.length)];
-  }
-
-  timer=setInterval(()=>{
-
-    if(state.over)return;
-
-    const lane=chooseSpawnLane();
-
-    if(lane!==null){
-      state.obstacles.push({
-        lane:lane,
-        y:-obstacleH,
-        warned:false
-      });
-
-      state.lastSpawnLane=lane;
-    }
-
-  },config.spawn);
-
-  function draw(){
-
-    ctx.fillStyle="#05080b";
-    ctx.fillRect(0,0,720,520);
-
-    // Road / lane area.
-    ctx.fillStyle="#091219";
-    ctx.fillRect(45,0,630,520);
-
-    // Lane dividers.
-    ctx.strokeStyle="#344a56";
-    ctx.lineWidth=4;
-
-    ctx.beginPath();
-    ctx.moveTo(240,0);
-    ctx.lineTo(240,520);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(480,0);
-    ctx.lineTo(480,520);
-    ctx.stroke();
-
-    // Lane center markers.
-    ctx.fillStyle="#172831";
-    for(let lane=0;lane<3;lane++){
-      ctx.fillRect(laneX[lane]-2,0,4,520);
-    }
-
-    // Player.
-    const px=laneX[state.lane];
-
-    ctx.fillStyle="#00f6ff";
-    ctx.beginPath();
-    ctx.moveTo(px,playerY);
-    ctx.lineTo(px-35,playerY+70);
-    ctx.lineTo(px+35,playerY+70);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle="rgba(0,246,255,.15)";
-    ctx.fillRect(
-      px-playerW/2,
-      playerY,
-      playerW,
-      playerH
-    );
-
-    // Obstacles.
-    state.obstacles.forEach(o=>{
-      const x=laneX[o.lane];
-
-      ctx.fillStyle="#ff4058";
-      ctx.fillRect(
-        x-obstacleW/2,
-        o.y,
-        obstacleW,
-        obstacleH
-      );
-
-      // Warning stripe.
-      if(o.y>220 && o.y<360){
-        ctx.fillStyle="#ffe85c";
-        ctx.fillRect(
-          x-obstacleW/2,
-          o.y,
-          obstacleW,
-          5
-        );
-      }
-    });
-  }
-
-  function loop(){
-
-    if(state.over)return;
-    if(paused){ raf=requestAnimationFrame(loop); return; }
-
-    state.obstacles.forEach(o=>{
-      o.y+=config.speed;
-    });
-
-    // Actual collision box.
-    for(const o of state.obstacles){
-
-      if(
-        o.lane===state.lane &&
-        o.y+obstacleH>playerY+10 &&
-        o.y<playerY+playerH-5
-      ){
-        state.over=true;
-
-        clearInterval(timer);
-        timer=null;
-
-        message(
-          "DANGER!",
-          "Distance: "+state.score+
-          " • Press R to restart"
-        );
-
-        draw();
-        hud(
-          "DISTANCE "+state.score,
-          difficulty.toUpperCase()
-        );
-        return;
-      }
-    }
-
-    state.obstacles=state.obstacles.filter(
-      o=>o.y<560
-    );
-
-    state.score++;
-
-    draw();
-
-    hud(
-      "DISTANCE "+state.score,
-      "LANE "+(state.lane+1),
-      difficulty.toUpperCase()
-    );
-
-    raf=requestAnimationFrame(loop);
-  }
-
-  draw();
-  loop();
-}
-
-/* ================= STICKMAN DUEL ================= */
-
-function startStickman(){
- const cfg={
-  easy:{ai:0.72,damage:8,cool:650},
-  normal:{ai:1.0,damage:10,cool:500},
-  hard:{ai:1.28,damage:12,cool:380}
+ const speed={
+  easy:4,
+  normal:6,
+  hard:8
  }[difficulty];
 
- canvas.width=900; canvas.height=600;
  state={
-  player:{x:250,y:465,vy:0,hp:100,attack:0,attackType:"",cool:0},
-  ai:{x:650,y:465,vy:0,hp:100,attack:0,attackType:"",cool:0},
-  over:false,score:0
+  lane:1,
+  obstacles:[],
+  score:0,
+  over:false
  };
- const ground=465;
- const gravity=0.85;
- const moveSpeed=5.2;
- let last=performance.now();
+
+ canvas.width=720;
+ canvas.height=520;
 
  window.onkeydown=e=>{
+
   const k=e.key.toLowerCase();
-  keys[k]=true;
-  if(["a","d","w","j","k","l"].includes(k)) e.preventDefault();
-  if(k==="r"&&state.over) startStickman();
-  if(k==="j") doAttack(state.player,"punch");
-  if(k==="k") doAttack(state.player,"kick");
- };
- window.onkeyup=e=>{ keys[e.key.toLowerCase()]=false; };
 
- function doAttack(f,type){
-  if(state.over||paused||f.attack>0||f.cool>0)return;
-  f.attack=type==="punch"?18:24;
-  f.attackType=type;
-  f.cool=type==="punch"?22:34;
- }
-
- function jump(f){
-  if(f.y>=ground-1) f.vy=-13;
- }
-
- function hit(attacker,target){
-  if(attacker.attack<=0)return;
-  const range=attacker.attackType==="kick"?82:68;
-  const dx=target.x-attacker.x;
-  const facing=dx>=0?1:-1;
-  if(Math.abs(dx)<range && Math.abs(target.y-attacker.y)<45){
-   const frame=attacker.attack;
-   if(frame===12 || frame===16){
-    target.hp=Math.max(0,target.hp-cfg.damage);
-    target.x+=facing*18;
-   }
+  if(
+   k==="arrowleft"||
+   k==="a"
+  ){
+   state.lane=
+    Math.max(
+     0,
+     state.lane-1
+    );
   }
- }
 
- function ai(){
-  const a=state.ai,p=state.player;
-  const dx=p.x-a.x;
-  if(Math.abs(dx)>95){ keys.__aiLeft=dx<0; keys.__aiRight=dx>0; }
-  else { keys.__aiLeft=false; keys.__aiRight=false; if(a.cool<=0) doAttack(a,Math.random()<0.65?"punch":"kick"); }
-  if(Math.abs(dx)>170&&Math.random()<0.018*cfg.ai) jump(a);
- }
+  if(
+   k==="arrowright"||
+   k==="d"
+  ){
+   state.lane=
+    Math.min(
+     2,
+     state.lane+1
+    );
+  }
 
- function fighter(f,body){
-  ctx.strokeStyle=body; ctx.fillStyle=body; ctx.lineWidth=7; ctx.lineCap="round";
-  ctx.beginPath(); ctx.arc(f.x,f.y-78,22,0,Math.PI*2); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(f.x,f.y-56); ctx.lineTo(f.x,f.y-5); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(f.x,f.y-40); ctx.lineTo(f.x-28,f.y-18); ctx.moveTo(f.x,f.y-40); ctx.lineTo(f.x+28,f.y-18); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(f.x,f.y-5); ctx.lineTo(f.x-24,f.y+38); ctx.moveTo(f.x,f.y-5); ctx.lineTo(f.x+24,f.y+38); ctx.stroke();
-  if(f.attack>0){
-   ctx.lineWidth=9; ctx.beginPath();
-   if(f.attackType==="punch"){ ctx.moveTo(f.x,f.y-40); ctx.lineTo(f.x+(f===state.player?1:-1)*72,f.y-43); }
-   else { ctx.moveTo(f.x,f.y-5); ctx.lineTo(f.x+(f===state.player?1:-1)*78,f.y+8); }
+  if(k==="r"&&state.over){
+   startDanger();
+  }
+ };
+
+ $("#controls").innerHTML=`
+  <button id="dangerLeft">←</button>
+  <button id="dangerRight">→</button>
+ `;
+
+ $("#dangerLeft").onclick=()=>{
+  state.lane=Math.max(
+   0,
+   state.lane-1
+  );
+ };
+
+ $("#dangerRight").onclick=()=>{
+  state.lane=Math.min(
+   2,
+   state.lane+1
+  );
+ };
+
+ timer=setInterval(()=>{
+
+  if(!state.over){
+
+   state.obstacles.push({
+    lane:Math.floor(
+     Math.random()*3
+    ),
+    y:-60
+   });
+  }
+
+ },difficulty==="hard"?450:difficulty==="normal"?700:950);
+
+ function loop(){
+
+  if(state.over)return;
+
+  ctx.fillStyle="#05080b";
+  ctx.fillRect(0,0,720,520);
+
+  ctx.strokeStyle="#263842";
+  ctx.lineWidth=3;
+
+  for(let x=120;x<=600;x+=240){
+
+   ctx.beginPath();
+   ctx.moveTo(x,0);
+   ctx.lineTo(x,520);
    ctx.stroke();
   }
- }
 
- function loop(now){
-  if(state.over)return;
-  if(paused){ last=now; raf=requestAnimationFrame(loop); return; }
-  const dt=Math.min(32,now-last); last=now;
-  const step=dt/16.67;
-
-  if(keys.w){ jump(state.player); keys.w=false; }
-  state.player.x+=(keys.a?-moveSpeed:0)+(keys.d?moveSpeed:0);
-  ai();
-  state.ai.x+=(keys.__aiLeft?-moveSpeed*cfg.ai:0)+(keys.__aiRight?moveSpeed*cfg.ai:0);
-
-  [state.player,state.ai].forEach(f=>{
-   f.vy+=gravity*step; f.y+=f.vy*step;
-   if(f.y>ground){f.y=ground;f.vy=0;}
-   f.x=Math.max(70,Math.min(830,f.x));
-   if(f.attack>0)f.attack-=step;
-   if(f.cool>0)f.cool-=step;
+  state.obstacles.forEach(o=>{
+   o.y+=speed;
   });
 
-  if(keys.l && state.player.cool<=0){ state.player.cool=8; }
-  hit(state.player,state.ai); hit(state.ai,state.player);
+  const playerX=
+   120+
+   state.lane*240;
 
-  if(state.player.hp<=0||state.ai.hp<=0){
-   state.over=true;
-   message(state.ai.hp<=0?"YOU WIN!":"AI WINS!","J = punch • K = kick • W = jump • R = restart");
+  ctx.fillStyle="#00f6ff";
+
+  ctx.beginPath();
+  ctx.moveTo(playerX,420);
+  ctx.lineTo(playerX-35,490);
+  ctx.lineTo(playerX+35,490);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle="#ff4058";
+
+  state.obstacles.forEach(o=>{
+
+   const x=
+    120+
+    o.lane*240;
+
+   ctx.fillRect(
+    x-35,
+    o.y,
+    70,
+    55
+   );
+  });
+
+  for(const o of state.obstacles){
+
+   if(
+    o.lane===state.lane&&
+    o.y>375&&
+    o.y<490
+   ){
+    state.over=true;
+    message(
+     "DANGER!",
+     "Distance: "+state.score+
+     " • Press R to restart"
+    );
+   }
   }
 
-  ctx.fillStyle="#05080b"; ctx.fillRect(0,0,900,600);
-  ctx.fillStyle="#0b151b"; ctx.fillRect(0,500,900,100);
-  ctx.strokeStyle="#00f6ff"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(70,500); ctx.lineTo(830,500); ctx.stroke();
+  state.obstacles=
+   state.obstacles.filter(
+    o=>o.y<560
+   );
 
-  // health bars
-  ctx.fillStyle="#281016"; ctx.fillRect(60,38,330,24); ctx.fillRect(510,38,330,24);
-  ctx.fillStyle="#00f6ff"; ctx.fillRect(60,38,330*(state.player.hp/100),24);
-  ctx.fillStyle="#ff4d62"; ctx.fillRect(510,38,330*(state.ai.hp/100),24);
-  ctx.fillStyle="#fff"; ctx.font="bold 16px Arial"; ctx.fillText("YOU",60,30); ctx.fillText("AI",510,30);
+  state.score++;
 
-  fighter(state.player,"#00f6ff"); fighter(state.ai,"#ff4d62");
-  hud("YOU "+Math.max(0,Math.ceil(state.player.hp))+" HP","AI "+Math.max(0,Math.ceil(state.ai.hp))+" HP",difficulty.toUpperCase());
+  hud(
+   "DISTANCE "+state.score,
+   difficulty.toUpperCase()
+  );
 
   raf=requestAnimationFrame(loop);
  }
 
- message("STICKMAN DUEL","A/D move • W jump • J punch • K kick");
- raf=requestAnimationFrame(loop);
+ loop();
 }
 </script>
 </body>
