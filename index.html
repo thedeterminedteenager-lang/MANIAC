@@ -2871,7 +2871,7 @@ resize();
   </div>
   <div id="maniac-ai-input">
     <input id="maniac-ai-text" type="text" placeholder="Ask MANIAC..." autocomplete="off">
-    <button id="maniac-ai-send">➤</button>
+    <button id="maniac-ai-mic" title="Voice input">🎙️</button><button id="maniac-ai-speak" title="Read latest response">🔊</button><button id="maniac-ai-voice" title="Voice chat">🗣️</button><button id="maniac-ai-send">➤</button>
   </div>
 </div>
 <style>
@@ -2924,7 +2924,7 @@ resize();
   border-radius:999px;padding:12px 16px;
   background:transparent;color:var(--text);outline:none;
 }
-#maniac-ai-send{
+#maniac-ai-mic,#maniac-ai-speak,#maniac-ai-voice{width:44px;height:44px;border:0;border-radius:50%;background:rgba(127,127,127,.18);color:var(--text);cursor:pointer;font-size:17px;flex-shrink:0}#maniac-ai-mic.listening,#maniac-ai-voice.active{background:var(--accent);color:#fff;box-shadow:0 0 18px rgba(0,234,255,.45)}#maniac-ai-send{
   width:44px;height:44px;border:0;border-radius:50%;
   background:var(--accent);color:#fff;cursor:pointer;font-size:18px;
 }
@@ -2939,51 +2939,89 @@ resize();
 </style>
 <script>
 (function(){
-  const b=document.getElementById('maniac-ai-btn');
-  const p=document.getElementById('maniac-ai-panel');
-  const c=document.getElementById('maniac-ai-close');
-  const input=document.getElementById('maniac-ai-text');
-  const send=document.getElementById('maniac-ai-send');
-  const messages=document.getElementById('maniac-ai-messages');
+  const b=document.getElementById("maniac-ai-btn");
+  const p=document.getElementById("maniac-ai-panel");
+  const c=document.getElementById("maniac-ai-close");
+  const input=document.getElementById("maniac-ai-text");
+  const send=document.getElementById("maniac-ai-send");
+  const messages=document.getElementById("maniac-ai-messages");
+  const mic=document.getElementById("maniac-ai-mic");
+  const speak=document.getElementById("maniac-ai-speak");
+  const voice=document.getElementById("maniac-ai-voice");
   if(!b||!p||!c||!input||!send)return;
-  b.onclick=()=>{p.classList.add('show');p.setAttribute('aria-hidden','false');input.focus()};
-  c.onclick=()=>{p.classList.remove('show');p.setAttribute('aria-hidden','true')};
+
+  let lastReply="";
+  let voiceMode=false;
+  let recognition=null;
+  let speaking=false;
+
+  b.onclick=()=>{p.classList.add("show");p.setAttribute("aria-hidden","false");input.focus()};
+  c.onclick=()=>{p.classList.remove("show");p.setAttribute("aria-hidden","true");if(recognition)try{recognition.stop()}catch(e){}speechSynthesis.cancel();voiceMode=false;voice.textContent="🗣️";voice.classList.remove("active");};
+
   function addMessage(text,type){
-    const d=document.createElement('div');
-    d.className='maniac-ai-msg '+type;
+    const d=document.createElement("div");
+    d.className="maniac-ai-msg "+type;
     d.textContent=text;
     messages.appendChild(d);
     messages.scrollTop=messages.scrollHeight;
   }
+
+  function speakText(text){
+    if(!("speechSynthesis" in window))return null;
+    speechSynthesis.cancel();
+    const clean=text.replace(/[*_#`]/g,"").replace(/<[^>]*>/g," ");
+    const u=new SpeechSynthesisUtterance(clean); const voices=speechSynthesis.getVoices(); const female=voices.find(v=>/female|samantha|zira|google us english|microsoft aria|microsoft jenny|microsoft ava/i.test(v.name))||voices.find(v=>/^en/i.test(v.lang)); if(female)u.voice=female;
+    u.rate=1;
+    u.pitch=1;
+    u.volume=1;
+    u.onstart=()=>{speaking=true;speak.textContent="⏹️";};
+    u.onend=()=>{speaking=false;speak.textContent="🔊";if(voiceMode){setTimeout(()=>{try{recognition.start()}catch(e){}},350)}};
+    u.onerror=()=>{speaking=false;speak.textContent="🔊";};
+    speechSynthesis.speak(u);
+    return u;
+  }
+
+  function stopSpeaking(){
+    speechSynthesis.cancel();
+    speaking=false;
+    speak.textContent="🔊";
+  }
+
   async function sendMessage(){
     const text=input.value.trim();
     if(!text)return;
 
-    addMessage(text,'user');
-    input.value='';
+    addMessage(text,"user");
+    input.value="";
 
-    const loading=document.createElement('div');
-    loading.className='maniac-ai-msg bot';
-    loading.textContent='MANIAC AI is thinking... 🤖';
+    const loading=document.createElement("div");
+    loading.className="maniac-ai-msg bot";
+    loading.textContent="MANIAC AI is thinking... 🤖";
     messages.appendChild(loading);
     messages.scrollTop=messages.scrollHeight;
 
     try{
-      const response=await fetch('https://maniacai.thedeterminedteenager.workers.dev/',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({message:text,history:[...messages.querySelectorAll('.maniac-ai-msg')].slice(-13,-1).map(m=>({role:m.classList.contains('user')?'user':'assistant',content:m.textContent.trim()}))})
+      const response=await fetch("https://maniacai.thedeterminedteenager.workers.dev/",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          message:text,
+          history:[...messages.querySelectorAll(".maniac-ai-msg")].slice(-13,-1).map(m=>({
+            role:m.classList.contains("user")?"user":"assistant",
+            content:m.textContent.trim()
+          }))
+        })
       });
 
       const data=await response.json();
-
       loading.remove();
 
-      if(!response.ok||!data.response){
-        throw new Error(data.error||'AI request failed');
-      }
+      if(!response.ok||!data.response)throw new Error(data.error||"AI request failed");
 
-      addMessage(data.response,'bot');
+      addMessage(data.response,"bot");
+      lastReply=data.response;
+
+      if(voiceMode)speakText(data.response);
 
     }catch(error){
       loading.remove();
@@ -2993,40 +3031,106 @@ resize();
 
       if(/\b(hi|hello|hey|yo|sup|wassup)\b/.test(q))
         reply="Hey! 👋 I'm MANIAC AI. Welcome to the MANIAC universe!";
-      else if(q.includes('what is maniac')||q.includes('about maniac'))
+      else if(q.includes("what is maniac")||q.includes("about maniac"))
         reply="MANIAC is a technology brand concept created by MUHAMMAD, focused on innovative devices, software, AI, gaming, networking, displays, and more.";
-      else if(q.includes('babatunfulu')||q.includes('who created maniac')||q.includes('who is the founder'))
+      else if(q.includes("babatunfulu")||q.includes("who created maniac")||q.includes("who is the founder"))
         reply="MUHAMMAD is the founder and creator of MANIAC — a young technology enthusiast, creator, and aspiring entrepreneur with a passion for technology and innovation.";
-      else if(q.includes('maniac one se')||q.includes('one se'))
+      else if(q.includes("maniac one se")||q.includes("one se"))
         reply="MANIAC ONE SE is the featured smartphone concept on this website. It's designed as part of the MANIAC ecosystem.";
-      else if(q.includes('product')||q.includes('products')||q.includes('devices'))
+      else if(q.includes("product")||q.includes("products")||q.includes("devices"))
         reply="MANIAC's vision includes smartphones, laptops, tablets, watches, earbuds, gaming devices, cameras, VR, displays, speakers, keyboards, printers, networking, power products, AI, and more.";
-      else if(q.includes('website')||q.includes('site'))
+      else if(q.includes("website")||q.includes("site"))
         reply="You're currently exploring the MANIAC website — a technology showcase created by MUHAMMAD.";
-      else if(q.includes('who are you')||q.includes('what can you do')||q.includes('your name'))
+      else if(q.includes("who are you")||q.includes("what can you do")||q.includes("your name"))
         reply="I'm MANIAC AI 🤖, the AI assistant built into the MANIAC website.";
-      else if(q.includes('elon')||q.includes('elon musk'))
+      else if(q.includes("elon")||q.includes("elon musk"))
         reply="Elon Musk is one of the technology and innovation figures featured in the MANIAC ICONS section.";
-      else if(q.includes('lamine')||q.includes('yamal'))
+      else if(q.includes("lamine")||q.includes("yamal"))
         reply="Lamine Yamal is one of the football figures featured in the MANIAC ICONS section.";
-      else if(q.includes('dwayne')||q.includes('the rock'))
+      else if(q.includes("dwayne")||q.includes("the rock"))
         reply="Dwayne Johnson, also known as THE ROCK, is one of the entertainment figures featured in the MANIAC ICONS section.";
-      else if(q.includes('sabrina')||q.includes('carpenter'))
+      else if(q.includes("sabrina")||q.includes("carpenter"))
         reply="Sabrina Carpenter is one of the music figures featured in the MANIAC ICONS section.";
-      else if(q.includes('lebron')||q.includes('james'))
+      else if(q.includes("lebron")||q.includes("james"))
         reply="LeBron James is one of the basketball figures featured in the MANIAC ICONS section.";
-      else if(q.includes('mrbeast')||q.includes('jimmy donaldson'))
+      else if(q.includes("mrbeast")||q.includes("jimmy donaldson"))
         reply="MrBeast, whose real name is Jimmy Donaldson, is featured in the MANIAC ICONS section as an inspiration figure.";
-      else if(q.includes('thank')||q.includes('thanks'))
+      else if(q.includes("thank")||q.includes("thanks"))
         reply="You're welcome! ✦ Welcome to the world of MANIAC.";
-      else if(q.includes('bye')||q.includes('goodbye'))
+      else if(q.includes("bye")||q.includes("goodbye"))
         reply="See you later! 👋 Keep exploring the MANIAC universe.";
 
-      addMessage(reply,'bot');
+      addMessage(reply,"bot");
+      lastReply=reply;
+      if(voiceMode)speakText(reply);
     }
   }
+
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+  if(SpeechRecognition&&mic&&voice){
+    recognition=new SpeechRecognition();
+    recognition.continuous=false;
+    recognition.interimResults=false;
+    recognition.lang="en-US";
+
+    recognition.onstart=()=>{
+      mic.classList.add("listening");
+      mic.textContent="⏹️";
+    };
+
+    recognition.onend=()=>{
+      mic.classList.remove("listening");
+      mic.textContent="🎙️";
+    };
+
+    recognition.onerror=()=>{
+      mic.classList.remove("listening");
+      mic.textContent="🎙️";
+    };
+
+    recognition.onresult=e=>{
+      const spoken=e.results[0][0].transcript;
+      input.value=spoken;
+      if(voiceMode)sendMessage();
+    };
+
+    mic.onclick=()=>{
+      if(mic.classList.contains("listening")){
+        try{recognition.stop()}catch(e){}
+      }else{
+        try{recognition.start()}catch(e){}
+      }
+    };
+
+    voice.onclick=()=>{
+      voiceMode=!voiceMode;
+
+      if(voiceMode){
+        voice.textContent="🛑";
+        voice.classList.add("active");
+        try{recognition.start()}catch(e){}
+      }else{
+        voice.textContent="🗣️";
+        voice.classList.remove("active");
+        try{recognition.stop()}catch(e){}
+        stopSpeaking();
+      }
+    };
+  }else{
+    if(mic)mic.onclick=()=>alert("Voice input is not supported by this browser. Try Chrome or Microsoft Edge.");
+    if(voice)voice.onclick=()=>alert("Voice chat is not supported by this browser. Try Chrome or Microsoft Edge.");
+  }
+
+  if(speak){
+    speak.onclick=()=>{
+      if(speaking)stopSpeaking();
+      else if(lastReply)speakText(lastReply);
+    };
+  }
+
   send.onclick=sendMessage;
-  input.addEventListener('keydown',e=>{if(e.key==='Enter')sendMessage()});
+  input.addEventListener("keydown",e=>{if(e.key==="Enter")sendMessage()});
 })();
 </script><style>
 #maniac-future-btn{
@@ -4431,6 +4535,9 @@ body.light-mode .mr-helpful{border-color:rgba(0,0,0,.15)}
 })();
 </script></body>
 </html>
+
+
+
 
 
 
