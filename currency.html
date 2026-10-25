@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANIAC MATHS | Currency Converter</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #070b12;
+  --panel: #101925;
+  --line: #263748;
+  --cyan: #00e5ff;
+  --green: #45ff9a;
+  --muted: #9aafc2;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: radial-gradient(ellipse at top, #12283a, var(--bg) 65%);
+  color: #f4f8ff;
+}
+header {
+  padding: 20px 6%;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 2px; }
+.logo span { color: var(--cyan); }
+nav { display: flex; gap: 18px; flex-wrap: wrap; }
+a { color: var(--cyan); text-decoration: none; }
+a:hover { color: var(--green); }
+main { width: min(950px, 92%); margin: 45px auto; }
+.eyebrow { color: var(--green); letter-spacing: 3px; font-size: .8rem; font-weight: 800; }
+h1 { font-size: clamp(2rem, 6vw, 3.6rem); margin: 10px 0; }
+h1 span { color: var(--cyan); }
+.intro { color: var(--muted); line-height: 1.7; }
+.converter {
+  margin-top: 28px; padding: clamp(18px, 4vw, 32px);
+  background: linear-gradient(145deg, #121f2d, #0b111a);
+  border: 1px solid var(--line); border-radius: 22px;
+  box-shadow: 0 20px 70px #0007;
+}
+label { display: block; margin-bottom: 8px; color: #b9ccdc; font-size: .9rem; }
+input, select, button {
+  width: 100%; padding: 14px; border-radius: 11px;
+  border: 1px solid #314658; background: #080f18;
+  color: white; font: inherit; min-width: 0;
+}
+input:focus, select:focus { outline: 2px solid var(--cyan); }
+.amount { margin-bottom: 22px; }
+.currency-grid {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: end; gap: 12px;
+}
+.swap {
+  width: 48px; height: 48px; padding: 0;
+  font-size: 1.4rem; color: var(--cyan);
+  cursor: pointer; border-color: var(--cyan);
+}
+button:hover { border-color: var(--green); }
+.result {
+  margin-top: 25px; padding: 22px;
+  background: #07131b; border: 1px solid #1d4651;
+  border-radius: 15px;
+}
+.result-label { color: var(--muted); font-size: .9rem; }
+#result { font-size: clamp(1.6rem, 5vw, 2.7rem); font-weight: 800; overflow-wrap: anywhere; margin: 10px 0; }
+#rate { color: var(--green); overflow-wrap: anywhere; }
+#status { margin-top: 16px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+.small { color: var(--muted); font-size: .82rem; line-height: 1.6; }
+footer { text-align: center; color: var(--muted); padding: 25px; border-top: 1px solid var(--line); }
+@media(max-width:600px) {
+  .currency-grid { grid-template-columns: 1fr; }
+  .swap { width: 100%; height: 42px; }
+  main { margin-top: 28px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">MANIAC <span>MATHS</span></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="currency.html">Currency</a>
+  </nav>
+</header>
+
+<main>
+  <div class="eyebrow">GLOBAL CURRENCY TOOLS</div>
+  <h1>Currency <span>Converter.</span></h1>
+  <p class="intro">Convert currencies using the latest available reference exchange rates. Search by country or currency and switch between currencies in one click.</p>
+
+  <section class="converter">
+    <div class="amount">
+      <label for="amount">Amount to convert</label>
+      <input id="amount" type="number" min="0" step="any" value="1000" placeholder="Enter amount">
+    </div>
+
+    <div class="currency-grid">
+      <div>
+        <label for="fromSearch">From country or currency</label>
+        <input id="fromSearch" type="search" placeholder="Search, e.g. Nigeria or NGN">
+        <select id="from"></select>
+      </div>
+      <button class="swap" id="swap" aria-label="Swap currencies" title="Swap currencies">⇄</button>
+      <div>
+        <label for="toSearch">To country or currency</label>
+        <input id="toSearch" type="search" placeholder="Search, e.g. United States or USD">
+        <select id="to"></select>
+      </div>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <div class="result-label">Converted amount</div>
+      <div id="result">Loading rates…</div>
+      <div id="rate"></div>
+    </div>
+    <div id="status">Connecting to exchange-rate service…</div>
+    <p class="small">Rates are indicative reference rates, not guaranteed bank, card, bureau-de-change, or remittance rates. Fees and provider rates may differ.</p>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> MANIAC MATHS · Built for curious minds.</footer>
+
+<script>
+"use strict";
+
+const RATE_URL = "https://open.er-api.com/v6/latest/USD";
+const COUNTRY_URL = "https://raw.githubusercontent.com/mledoze/countries/master/countries.json";
+const RATE_CACHE = "maniacMathsRatesV1";
+const COUNTRY_CACHE = "maniacMathsCountriesV1";
+
+const $ = id => document.getElementById(id);
+const fromSelect = $("from");
+const toSelect = $("to");
+let rates = null;
+let countries = [];
+let choices = [];
+
+$("year").textContent = new Date().getFullYear();
+
+function setStatus(message) {
+  $("status").textContent = message;
+}
+
+function getCurrencyName(country, code) {
+  return country.currencies?.[code]?.name || code;
+}
+
+function buildChoices() {
+  const seen = new Set();
+  choices = [];
+
+  for (const country of countries) {
+    const currencies = country.currencies || {};
+    for (const code of Object.keys(currencies)) {
+      if (!rates?.rates?.[code]) continue;
+
+      const key = `${country.cca2}-${code}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+
+      choices.push({
+        key,
+        country: country.name?.common || country.cca2,
+        countryCode: country.cca2,
+        code,
+        currency: getCurrencyName(country, code)
+      });
+    }
+  }
+
+  choices.sort((a, b) =>
+    a.country.localeCompare(b.country) || a.code.localeCompare(b.code)
+  );
+}
+
+function fillSelect(select, searchInput, preferredCountry, preferredCode) {
+  const query = searchInput.value.trim().toLowerCase();
+  const previous = select.value;
+
+  const filtered = choices.filter(item => {
+    const text = `${item.country} ${item.currency} ${item.code} ${item.countryCode}`.toLowerCase();
+    return text.includes(query);
+  });
+
+  select.replaceChildren();
+
+  if (!filtered.length) {
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = "No matching currencies";
+    select.appendChild(option);
+    return;
+  }
+
+  for (const item of filtered) {
+    const option = document.createElement("option");
+    option.value = item.key;
+    option.textContent = `${item.country} — ${item.currency} (${item.code})`;
+    select.appendChild(option);
+  }
+
+  const preferred = filtered.find(item =>
+    item.countryCode === preferredCountry && item.code === preferredCode
+  );
+  const old = filtered.find(item => item.key === previous);
+  select.value = old?.key || preferred?.key || filtered[0].key;
+}
+
+function refreshSelects() {
+  fillSelect(fromSelect, $("fromSearch"), "NG", "NGN");
+  fillSelect(toSelect, $("toSearch"), "US", "USD");
+}
+
+function selectedCurrency(select) {
+  return choices.find(item => item.key === select.value);
+}
+
+function formatMoney(value, code) {
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency", currency: code,
+      maximumFractionDigits: 4
+    }).format(value);
+  } catch {
+    return `${value.toLocaleString("en-US", {maximumFractionDigits: 4})} ${code}`;
+  }
+}
+
+function convert() {
+  const from = selectedCurrency(fromSelect);
+  const to = selectedCurrency(toSelect);
+  const amount = Number($("amount").value);
+
+  if (!from || !to) {
+    $("result").textContent = "Choose two currencies";
+    $("rate").textContent = "";
+    return;
+  }
+
+  if (!Number.isFinite(amount) || amount < 0) {
+    $("result").textContent = "Enter a valid amount";
+    $("rate").textContent = "";
+    return;
+  }
+
+  if (!rates?.rates?.[from.code] || !rates?.rates?.[to.code]) {
+    $("result").textContent = "Rate unavailable";
+    $("rate").textContent = "";
+    return;
+  }
+
+  const usdAmount = amount / rates.rates[from.code];
+  const converted = usdAmount * rates.rates[to.code];
+  const oneUnit = rates.rates[to.code] / rates.rates[from.code];
+
+  $("result").textContent = formatMoney(converted, to.code);
+  $("rate").textContent = `1 ${from.code} ≈ ${oneUnit.toLocaleString("en-US", {maximumFractionDigits: 6})} ${to.code}`;
+}
+
+async function getJSON(url) {
+  const response = await fetch(url, {cache: "no-store"});
+  if (!response.ok) throw new Error(`Request failed (${response.status})`);
+  return response.json();
+}
+
+async function loadData() {
+  let rateMessage = "";
+  let countryMessage = "";
+
+  try {
+    const data = await getJSON(RATE_URL);
+    if (data.result !== "success" || !data.rates) throw new Error("Invalid rate response");
+    rates = data;
+    localStorage.setItem(RATE_CACHE, JSON.stringify(data));
+    rateMessage = `Live rates loaded. Provider update: ${data.time_last_update_utc || "latest available"}.`;
+  } catch (error) {
+    try {
+      rates = JSON.parse(localStorage.getItem(RATE_CACHE));
+      if (!rates?.rates) throw new Error("No saved rates");
+      rateMessage = "Live rates unavailable. Using previously saved rates.";
+    } catch {
+      setStatus("Couldn't load exchange rates. Check your internet connection and reload this page.");
+      $("result").textContent = "Rates unavailable";
+      return;
+    }
+  }
+
+  try {
+    const data = await getJSON(COUNTRY_URL);
+    if (!Array.isArray(data)) throw new Error("Invalid country list");
+    countries = data;
+    localStorage.setItem(COUNTRY_CACHE, JSON.stringify(data));
+  } catch {
+    try {
+      countries = JSON.parse(localStorage.getItem(COUNTRY_CACHE));
+      if (!Array.isArray(countries)) throw new Error("No saved country list");
+      countryMessage = " Using a saved country list.";
+    } catch {
+      setStatus("Rates loaded, but the country list could not load. Check your connection and reload.");
+      $("result").textContent = "Country list unavailable";
+      return;
+    }
+  }
+
+  buildChoices();
+  refreshSelects();
+  convert();
+  setStatus(`${rateMessage}${countryMessage} Exchange rates are indicative and may differ from your provider.`);
+}
+
+$("amount").addEventListener("input", convert);
+fromSelect.addEventListener("change", convert);
+toSelect.addEventListener("change", convert);
+$("fromSearch").addEventListener("input", () => {
+  fillSelect(fromSelect, $("fromSearch"), "NG", "NGN");
+  convert();
+});
+$("toSearch").addEventListener("input", () => {
+  fillSelect(toSelect, $("toSearch"), "US", "USD");
+  convert();
+});
+
+$("swap").addEventListener("click", () => {
+  const from = fromSelect.value;
+  const to = toSelect.value;
+  $("fromSearch").value = "";
+  $("toSearch").value = "";
+  fillSelect(fromSelect, $("fromSearch"), "", "");
+  fillSelect(toSelect, $("toSearch"), "", "");
+  fromSelect.value = to;
+  toSelect.value = from;
+  convert();
+});
+
+loadData();
+</script>
+</body>
+</html>
