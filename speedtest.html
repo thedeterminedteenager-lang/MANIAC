@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>MANIAC SPEED | Internet Speed Test</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#101f32;--cyan:#00e5ff;--muted:#9cb1c8;--green:#65f5a8}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#142d46 0%,var(--bg) 58%);color:#f5f9ff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+a{color:var(--cyan);text-decoration:none}
+header{padding:20px 6%;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #26384d}
+.brand{font-size:clamp(19px,4vw,27px);font-weight:900;letter-spacing:1px}
+.brand span{color:var(--cyan)}
+.home{border:1px solid #38516b;border-radius:20px;padding:10px 15px}
+main{width:min(960px,92%);margin:36px auto 60px}
+.intro{text-align:center;margin-bottom:28px}
+h1{font-size:clamp(29px,6vw,45px);margin:0 0 12px}
+p{line-height:1.6;color:var(--muted)}
+.panel{background:rgba(16,31,50,.92);border:1px solid #263d55;border-radius:24px;padding:clamp(18px,4vw,34px);box-shadow:0 20px 70px #0003}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.metric{background:#091726;border:1px solid #26394e;border-radius:16px;padding:17px 8px;text-align:center;min-width:0}
+.metric .label{font-size:12px;color:var(--muted);letter-spacing:1px}
+.metric .value{font-size:clamp(25px,5vw,38px);font-weight:800;margin:12px 0 5px;overflow-wrap:anywhere}
+.metric .unit{font-size:12px;color:var(--muted)}
+.gauge-wrap{display:flex;justify-content:center;margin:30px 0 20px}
+.gauge{width:210px;height:210px;border:3px solid #24445c;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 35px #00e5ff12;position:relative}
+.gauge:before{content:"";position:absolute;inset:9px;border:1px dashed #31516a;border-radius:50%}
+.gauge strong{font-size:54px;z-index:1}
+.gauge span{color:var(--muted);z-index:1;font-size:13px}
+button{border:0;border-radius:30px;background:var(--cyan);color:#04111c;font-size:16px;font-weight:900;padding:17px 35px;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+.actions{text-align:center;margin-top:22px}
+#status{min-height:28px;text-align:center;color:var(--cyan);margin-top:15px}
+h2{font-size:23px;margin:0 0 16px}
+.report{margin-top:22px}
+.report-item{padding:15px 0;border-bottom:1px solid #26394e}
+.report-item:last-child{border:0}
+.report-item strong{display:block;margin-bottom:6px;color:#fff}
+.report-item p{margin:0}
+.note{font-size:12px;margin-top:22px}
+footer{text-align:center;color:#6f879f;padding:25px;font-size:12px}
+@media(max-width:540px){.metrics{gap:6px}.metric{padding:13px 4px}.metric .label{font-size:10px}.gauge{width:175px;height:175px}.gauge strong{font-size:45px}header{padding:16px 4%}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">MANIAC <span>SPEED</span></a>
+  <a class="home" href="index.html">← Home</a>
+</header>
+<main>
+  <section class="intro">
+    <h1>How fast is your internet?</h1>
+    <p>Measure your connection and discover what it can handle.</p>
+  </section>
+
+  <section class="panel">
+    <div class="metrics">
+      <div class="metric"><div class="label">PING</div><div class="value" id="ping">--</div><div class="unit">milliseconds</div></div>
+      <div class="metric"><div class="label">DOWNLOAD</div><div class="value" id="download">--</div><div class="unit">Mbps</div></div>
+      <div class="metric"><div class="label">UPLOAD</div><div class="value" id="upload">--</div><div class="unit">Mbps</div></div>
+    </div>
+
+    <div class="gauge-wrap">
+      <div class="gauge">
+        <strong id="gaugeValue">GO</strong>
+        <span id="gaugeLabel">Mbps download</span>
+      </div>
+    </div>
+
+    <div class="actions"><button id="start">START SPEED TEST</button></div>
+    <div id="status" role="status" aria-live="polite">Ready when you are.</div>
+    <div id="jitterLine" style="text-align:center;color:#9cb1c8;font-size:13px">Jitter: -- ms</div>
+  </section>
+
+  <section class="panel report">
+    <h2>Your connection capability report</h2>
+    <p id="reportIntro">Run a test to receive recommendations based on your measured speeds.</p>
+    <div id="report">
+      <div class="report-item"><strong>Video streaming</strong><p>Waiting for results.</p></div>
+      <div class="report-item"><strong>Online gaming</strong><p>Waiting for results.</p></div>
+      <div class="report-item"><strong>Video calls</strong><p>Waiting for results.</p></div>
+      <div class="report-item"><strong>Downloads and multiple devices</strong><p>Waiting for results.</p></div>
+    </div>
+    <p class="note">Measurements use Cloudflare's public speed-test endpoints. Results depend on the route to the test server, Wi-Fi or Ethernet, your device, and network congestion. Recommendations are estimates, not guarantees. This test does not measure your internet plan's advertised maximum.</p>
+  </section>
+</main>
+<footer>MANIAC SPEED · Built for curious minds.</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const downURL = "https://speed.cloudflare.com/__down";
+const upURL = "https://speed.cloudflare.com/__up";
+let running = false;
+
+function mbps(bytes, milliseconds) {
+  return bytes * 8 / (milliseconds * 1000);
+}
+function average(values) {
+  return values.reduce((a,b)=>a+b,0)/values.length;
+}
+function stddev(values) {
+  const mean=average(values);
+  return Math.sqrt(average(values.map(v=>(v-mean)**2)));
+}
+function format(n) {
+  return n < 10 ? n.toFixed(2) : n.toFixed(1);
+}
+async function timedFetch(url, options) {
+  const start=performance.now();
+  const response=await fetch(url,{cache:"no-store",...options});
+  if(!response.ok) throw new Error("Test server returned HTTP "+response.status);
+  return {response,elapsed:performance.now()-start};
+}
+async function measureLatency() {
+  const samples=[];
+  for(let i=0;i<5;i++){
+    const start=performance.now();
+    const result=await timedFetch(downURL+"?bytes=0&cacheBust="+crypto.randomUUID());
+    await result.response.arrayBuffer();
+    samples.push(performance.now()-start);
+  }
+  return samples;
+}
+function makeBlob(size) {
+  const bytes=new Uint8Array(size);
+  crypto.getRandomValues(bytes.subarray(0,Math.min(size,65536)));
+  // Fill the remaining payload without relying on a cached static file.
+  for(let i=65536;i<size;i+=65536){
+    crypto.getRandomValues(bytes.subarray(i,Math.min(i+65536,size)));
+  }
+  return new Blob([bytes],{type:"application/octet-stream"});
+}
+async function measureDownload() {
+  const bytes=5*1024*1024;
+  const start=performance.now();
+  const result=await timedFetch(downURL+"?bytes="+bytes+"&cacheBust="+crypto.randomUUID());
+  const data=await result.response.arrayBuffer();
+  const elapsed=performance.now()-start;
+  if(!data.byteLength) throw new Error("No download data received.");
+  return mbps(data.byteLength,elapsed);
+}
+async function measureUpload() {
+  const payload=makeBlob(2*1024*1024);
+  const start=performance.now();
+  const result=await timedFetch(upURL+"?cacheBust="+crypto.randomUUID(),{
+    method:"POST",body:payload,headers:{"Content-Type":"application/octet-stream"}
+  });
+  await result.response.arrayBuffer();
+  const elapsed=performance.now()-start;
+  return mbps(payload.size,elapsed);
+}
+function reportFor(d,u,p,j) {
+  const items=[];
+  if(d<3) items.push(["Video streaming","Basic browsing and lower-resolution video may work, but HD streams can buffer, especially when other devices are active."]);
+  else if(d<5) items.push(["Video streaming","SD and some 720p HD streaming should be manageable on one device."]);
+  else if(d<15) items.push(["Video streaming","HD and often 1080p streaming should work on one device. Multiple streams use more bandwidth."]);
+  else items.push(["Video streaming",d<25?"4K streaming may work for one device when the service requires around 15–25 Mbps.":"Good bandwidth for 4K streaming and multiple active devices, depending on their combined demand."]);
+
+  items.push(["Online gaming",p<30&&j<10
+    ?"Your measured latency and jitter look favourable for responsive online gaming. Actual game performance also depends on the game server and packet loss."
+    :p<60&&j<20
+    ?"Gaming should be possible, but some fast-paced games may feel less responsive. Check latency to the actual game server."
+    :"Latency or jitter may affect responsive multiplayer games. A faster download speed alone will not fix this."]);
+
+  items.push(["Video calls",u<1
+    ?"Upload speed is limited for video calls, particularly HD calls or when other devices are uploading."
+    :u<3
+    ?"One-to-one video calls may work, especially at moderate quality. Multiple callers or HD uploads may struggle."
+    :"Upload bandwidth looks suitable for many ordinary video calls. Stability and the app's requirements still matter."]);
+
+  items.push(["Downloads and multiple devices",d<5
+    ?"Large downloads will take a while. Keep simultaneous streaming and downloads limited."
+    :d<25
+    ?"Everyday downloads should be manageable. Heavy downloads on several devices may compete for bandwidth."
+    :"Good measured download capacity for large downloads and several active devices, provided the connection remains stable."]);
+
+  $("report").replaceChildren(...items.map(([title,desc])=>{
+    const div=document.createElement("div");
+    div.className="report-item";
+    const strong=document.createElement("strong");strong.textContent=title;
+    const p=document.createElement("p");p.textContent=desc;
+    div.append(strong,p);return div;
+  }));
+  $("reportIntro").textContent=`Based on ${format(d)} Mbps download, ${format(u)} Mbps upload, ${Math.round(p)} ms latency, and ${Math.round(j)} ms jitter.`;
+}
+$("start").addEventListener("click",async()=>{
+  if(running)return;
+  running=true;
+  $("start").disabled=true;
+  $("gaugeValue").textContent="…";
+  $("status").textContent="Measuring latency…";
+  $("ping").textContent="--";$("download").textContent="--";$("upload").textContent="--";
+  $("jitterLine").textContent="Jitter: measuring…";
+  try{
+    const latencies=await measureLatency();
+    const ping=average(latencies),jitter=stddev(latencies);
+    $("ping").textContent=Math.round(ping);
+    $("jitterLine").textContent="Jitter: "+Math.round(jitter)+" ms";
+    $("status").textContent="Measuring download speed…";
+    const down=await measureDownload();
+    $("download").textContent=format(down);
+    $("gaugeValue").textContent=format(down);
+    $("status").textContent="Measuring upload speed…";
+    const up=await measureUpload();
+    $("upload").textContent=format(up);
+    reportFor(down,up,ping,jitter);
+    $("status").textContent="Test complete!";
+  }catch(error){
+    $("status").textContent="A test failed: "+error.message+". Check your connection and try again.";
+    $("reportIntro").textContent="The test did not finish successfully. Retry before relying on a capability report.";
+  }finally{
+    $("start").disabled=false;
+    running=false;
+    if($("gaugeValue").textContent==="…") $("gaugeValue").textContent="GO";
+  }
+});
+</script>
+</body>
+</html>
